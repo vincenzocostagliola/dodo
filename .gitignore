@@ -48,3 +48,4 @@ google-services.json
 /.idea/vcs.xml
 /.idea/AndroidProjectSystem.xml
 /.idea
+/.idea/*.*
