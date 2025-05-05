@@ -23,3 +23,4 @@ rootProject.name = "dodo"
 include(":app")
 include(":db")
 include(":home")
+include(":designsystem")
