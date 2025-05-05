@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "dodo"
 include(":app")
+include(":db")
  
