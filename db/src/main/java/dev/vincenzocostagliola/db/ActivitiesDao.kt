@@ -14,10 +14,16 @@ interface ActivitiesDao {
     @Delete
     suspend fun deleteActivity(activity: ActivityDTO)
 
-    @Query("SELECT * FROM comics")
+    @Query("SELECT * FROM activities")
     suspend fun getAllActivities(): List<ActivityDTO>
 
-    @Query("SELECT * FROM comics WHERE id = :isbn")
-    suspend fun getComic(isbn: String): Comic?
+    @Query("SELECT * FROM activities WHERE id = :id")
+    suspend fun getComic(id: Int): ActivityDTO?
+
+    @Query("SELECT * FROM activities WHERE status = :status")
+    suspend fun getActivitiesByStatus(status: String): List<ActivityDTO>
+
+    @Query("SELECT * FROM activities WHERE addedDate = :date")
+    suspend fun getActivitiesByDate(date: String): List<ActivityDTO>
 
 }
