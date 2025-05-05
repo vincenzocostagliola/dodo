@@ -1,4 +1,4 @@
-package dev.vincenzocostagliola.db
+package dev.vincenzocostagliola.home
 
 import org.junit.Test
 
