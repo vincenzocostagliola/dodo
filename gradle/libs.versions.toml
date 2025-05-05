@@ -79,6 +79,12 @@ coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesCore" }
 coroutinesAndroid = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 
+#ROOM
+room_runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room_ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room_compiler = { module = "androidx.room:room-compiler", version.ref = "room_compiler" }
+
+
 [bundles]
 network = [
     "sandwich",
@@ -104,6 +110,8 @@ compose = [
     "coil",
     "compose_icons",
     "androidx-navigation-compose"]
+
+room = ["room_runtime", "room_ktx"]
 
 
 [plugins]
