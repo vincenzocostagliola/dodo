@@ -66,4 +66,9 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.threeTen)
 
+    /**MODULES*/
+    implementation(project(":designsystem"))
+    implementation(project(":features:home"))
+    implementation(project(":features:details"))
+    implementation(project(":data"))
 }
