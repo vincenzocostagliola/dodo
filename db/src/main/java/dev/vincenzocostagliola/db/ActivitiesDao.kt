@@ -9,21 +9,21 @@ import androidx.room.Query
 interface ActivitiesDao {
 
     @Insert
-    suspend fun insertActivity(activity: ActivityDTO)
+    suspend fun insertActivity(activity: ActivityDb)
 
     @Delete
-    suspend fun deleteActivity(activity: ActivityDTO)
+    suspend fun deleteActivity(activity: ActivityDb)
 
     @Query("SELECT * FROM activities")
-    suspend fun getAllActivities(): List<ActivityDTO>
+    suspend fun getAllActivities(): List<ActivityDb>
 
     @Query("SELECT * FROM activities WHERE id = :id")
-    suspend fun getComic(id: Int): ActivityDTO?
+    suspend fun getComic(id: Int): ActivityDb?
 
     @Query("SELECT * FROM activities WHERE status = :status")
-    suspend fun getActivitiesByStatus(status: String): List<ActivityDTO>
+    suspend fun getActivitiesByStatus(status: String): List<ActivityDb>
 
     @Query("SELECT * FROM activities WHERE addedDate = :date")
-    suspend fun getActivitiesByDate(date: String): List<ActivityDTO>
+    suspend fun getActivitiesByDate(date: String): List<ActivityDb>
 
 }

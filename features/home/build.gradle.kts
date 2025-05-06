@@ -53,5 +53,6 @@ dependencies {
     implementation(libs.bundles.network)
     /**MODULES*/
     implementation(project(":data"))
+    implementation(project(":db"))
     implementation(project(":designsystem"))
 }
