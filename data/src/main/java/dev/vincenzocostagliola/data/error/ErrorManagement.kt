@@ -1,8 +1,5 @@
 package dev.vincenzocostagliola.data.error
 
-import com.skydoves.sandwich.ApiResponse
-import com.skydoves.sandwich.retrofit.raw
-import dev.vincenzocostagliola.data.error.CoinSwatchError
 import timber.log.Timber
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -12,69 +9,59 @@ import javax.net.ssl.SSLHandshakeException
 
 class ErrorManagement @Inject constructor() {
 
-    fun manageOnError(e: ApiResponse.Failure.Error): CoinSwatchError {
-        Timber.Forest.d("CoinSwatchErrorManagement - manageError : $e")
-        return manageHttpCodeError(e.raw.code)
-    }
-
-    fun manageOnException(e: ApiResponse.Failure.Exception): CoinSwatchError {
-        Timber.Forest.d("CoinSwatchErrorManagement - manageOnException : $e")
-        return evaluateCause(e.throwable.cause)
-    }
-
-    fun manageException(e: Throwable): CoinSwatchError {
+    fun manageException(e: Throwable): AppError {
         Timber.Forest.d("CoinSwatchErrorManagement - manageOnException : $e")
         return evaluateCause(e.cause)
     }
 
-    private fun evaluateCause(cause: Throwable?): CoinSwatchError {
+    private fun evaluateCause(cause: Throwable?): AppError {
         Timber.Forest.d("CoinSwatchErrorManagement - evaluateCause : $cause")
 
 
         return when (cause) {
             is UnknownHostException -> {
-                CoinSwatchError.ErrorOffline
+                AppError.ErrorOffline
             }
 
             is SSLHandshakeException,
             is SocketTimeoutException,
             is ConnectException -> {
-                CoinSwatchError.ErrorConnection
+                AppError.ErrorConnection
             }
 
             else -> {
-                CoinSwatchError.ErrorGenericCause
+                AppError.ErrorGenericCause
             }
         }
     }
 
-    private fun manageHttpCodeError(errorCode: Int?): CoinSwatchError {
+    private fun manageHttpCodeError(errorCode: Int?): AppError {
         Timber.Forest.d("CoinSwatchErrorManagement - Status : ${errorCode}")
         //TODO add specific error code mapping based on feature/module
         return when (errorCode) {
             400 -> {
-                CoinSwatchError.ErrorBadRequest
+                AppError.ErrorBadRequest
             }
 
             401 -> {
                 // Perform a logout
-                CoinSwatchError.ErrorAndQuit
+                AppError.ErrorAndQuit
             }
 
             405 -> {
-                CoinSwatchError.ErrorBadRequest
+                AppError.ErrorBadRequest
             }
 
             500 -> {
-                CoinSwatchError.ErrorServerInternalError
+                AppError.ErrorServerInternalError
             }
 
             504 -> {
-                CoinSwatchError.ErrorTimeoutGateWay
+                AppError.ErrorTimeoutGateWay
             }
 
             else -> {
-                CoinSwatchError.GenericError
+                AppError.GenericError
             }
         }
     }

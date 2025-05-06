@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 
-data class CoinUi(
+data class InfoUi(
     val currentPrice: Double,
     val id: String,
     val image: String,
@@ -20,7 +20,7 @@ data class CoinUi(
 )
 
 @Composable
-fun CoinShortInfoListItem(coin: CoinUi, onClick: (String) -> Unit) {
+fun ShortInfoListItem(coin: InfoUi, onClick: (String) -> Unit) {
     Surface(
         onClick = { onClick(coin.id) }
     ) {

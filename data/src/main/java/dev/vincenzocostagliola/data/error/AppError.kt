@@ -5,10 +5,10 @@ import dev.vincenzocostagliola.data.error.DialogAction.Leave
 import dev.vincenzocostagliola.data.error.DialogAction.Quit
 import dev.vincenzocostagliola.data.error.DialogAction.Retry
 
-sealed class CoinSwatchError {
+sealed class AppError {
     abstract val newResources: ErrorResources
 
-    data object GenericError : CoinSwatchError() {
+    data object GenericError : AppError() {
         override val newResources: ErrorResources = ErrorResources(
             errorTextResource = R.string.unknown_error,
             mainAction = Retry,
@@ -16,7 +16,7 @@ sealed class CoinSwatchError {
         )
     }
 
-    object ErrorBadRequest : CoinSwatchError() {
+    object ErrorBadRequest : AppError() {
         override val newResources: ErrorResources = ErrorResources(
             errorTextResource = R.string.unknown_error,
             mainAction = Retry,
@@ -24,7 +24,7 @@ sealed class CoinSwatchError {
         )
     }
 
-    object ErrorAndQuit : CoinSwatchError() {
+    object ErrorAndQuit : AppError() {
         override val newResources: ErrorResources = ErrorResources(
             errorTextResource = R.string.not_allowed,
             mainAction = Quit,
@@ -32,7 +32,7 @@ sealed class CoinSwatchError {
         )
     }
 
-    object ErrorServerInternalError : CoinSwatchError() {
+    object ErrorServerInternalError : AppError() {
         override val newResources: ErrorResources = ErrorResources(
             errorTextResource = R.string.not_allowed,
             mainAction = Retry,
@@ -40,7 +40,7 @@ sealed class CoinSwatchError {
         )
     }
 
-    object ErrorTimeoutGateWay : CoinSwatchError() {
+    object ErrorTimeoutGateWay : AppError() {
         override val newResources: ErrorResources = ErrorResources(
             errorTextResource = R.string.not_allowed,
             mainAction = Retry,
@@ -48,7 +48,7 @@ sealed class CoinSwatchError {
         )
     }
 
-    object ErrorConnection : CoinSwatchError() {
+    object ErrorConnection : AppError() {
         override val newResources: ErrorResources = ErrorResources(
             errorTextResource = R.string.offline,
             mainAction = Retry,
@@ -56,7 +56,7 @@ sealed class CoinSwatchError {
         )
     }
 
-    object ErrorGenericCause : CoinSwatchError() {
+    object ErrorGenericCause : AppError() {
         override val newResources: ErrorResources = ErrorResources(
             errorTextResource = R.string.unknown_error,
             mainAction = Retry,
@@ -64,7 +64,7 @@ sealed class CoinSwatchError {
         )
     }
 
-    object ErrorOffline : CoinSwatchError() {
+    object ErrorOffline : AppError() {
         override val newResources: ErrorResources = ErrorResources(
             errorTextResource = R.string.offline,
             mainAction = Retry,

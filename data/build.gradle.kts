@@ -9,12 +9,13 @@ plugins {
 android {
     namespace = "dev.vincenzocostagliola.data"
     compileSdk = 35
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
