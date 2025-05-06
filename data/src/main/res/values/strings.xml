@@ -1,0 +1,9 @@
+<resources>
+    <string name="retry">Retry</string>
+    <string name="logout">Logout</string>
+    <string name="leave">Leave</string>
+    <string name="unknown_error">There is a problem but we have no idea of what it is. Get in touch via the app or our website, and please be clement.</string>
+    <string name="not_allowed">You can\'t perform this action. If the problem persists, logout and login again: it will solve your problem.</string>
+    <string name="offline">We need to be online in order to make it work. Or you are saying that you finished all your mobile data?</string>
+
+</resources>

@@ -51,5 +51,5 @@ dependencies {
     implementation(libs.threeTen)
 
     /**MODULES*/
-//    implementation(project(":data"))
+    implementation(project(":data"))
 }

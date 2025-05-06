@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="retry">Riprova</string>
+    <string name="logout">Logout</string>
+    <string name="leave">Abbandona</string>
+    <string name="unknown_error">Si è presentato un problema ma non abbiamo idea di cosa si tratta. Contattaci via app o tramite il nostro sito</string>
+    <string name="not_allowed">Non puoi eseguire questa azione. Se il problema persiste, scollegati e accedi di nuovo: risolverà il tuo problema.</string>
+    <string name="offline">Abbiamo bisogno di Internet per poter farlo funzionare. O ci stai dicendo che hai già finito i giga?!</string>
+</resources>
