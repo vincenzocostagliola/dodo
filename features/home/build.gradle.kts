@@ -41,7 +41,7 @@ dependencies {
     implementation(libs.androidx.material3)
     /**HILT*/
     // For hilt Implementation
-    implementation (libs.hilt)
+    implementation(libs.hilt)
     ksp(libs.hilt.compiler)
     implementation(libs.timber)
     /**SERIALIZATION*/
@@ -52,6 +52,6 @@ dependencies {
     /**NETWORK*/
     implementation(libs.bundles.network)
     /**MODULES*/
-   // implementation(project(":data"))
+    implementation(project(":data"))
     implementation(project(":designsystem"))
 }
