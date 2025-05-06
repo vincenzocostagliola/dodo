@@ -53,5 +53,5 @@ dependencies {
     implementation(libs.bundles.network)
     /**MODULES*/
    // implementation(project(":data"))
-    //implementation(project(":designsystem"))
+    implementation(project(":designsystem"))
 }
