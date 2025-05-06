@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.vincenzocostagliola.data.error.ErrorManagement
+import dev.vincenzocostagliola.db.DodoDB
 import dev.vincenzocostagliola.home.data.repository.Repository
 import dev.vincenzocostagliola.home.data.repository.RepositoryImpl
 import dev.vincenzocostagliola.home.usecase.HomeUseCase
@@ -18,9 +19,11 @@ class HomeModule {
     @Provides
     @Singleton
     internal fun provideRepository(
-        errorManagement: ErrorManagement
+        errorManagement: ErrorManagement,
+        db: DodoDB
     ): Repository = RepositoryImpl(
-        errorManagement = errorManagement
+        errorManagement = errorManagement,
+        db = db
     )
     @Provides
     @Singleton
