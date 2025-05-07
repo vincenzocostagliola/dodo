@@ -1,15 +1,15 @@
 package dev.vincenzocostagliola.home.data.dto
 
-import dev.vincenzocostagliola.home.data.domain.ActivityDomain
+import dev.vincenzocostagliola.home.data.domain.Todo
 
-internal data class ActivityDto(
+internal data class TodoDto(
     val id : Int,
     val title : String,
     val description : String,
     val status : String
 ){
-    fun toDomain() : ActivityDomain {
-        return ActivityDomain(
+    fun toDomain() : Todo {
+        return Todo(
             id = id,
             title = title,
             description = description,

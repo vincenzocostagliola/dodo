@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.vincenzocostagliola.data.error.AppError
 import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.designsystem.composables.InfoUi
-import dev.vincenzocostagliola.home.data.domain.ActivityDomain
+import dev.vincenzocostagliola.home.data.domain.Todo
 import dev.vincenzocostagliola.home.data.domain.result.GetActivityResult
 import dev.vincenzocostagliola.home.usecase.HomeUseCase
 import kotlinx.coroutines.Dispatchers
@@ -91,7 +91,7 @@ class HomeViewModel @Inject internal constructor(
         }
     }
 
-    private fun ActivityDomain.toInfoUi(): InfoUi {
+    private fun Todo.toInfoUi(): InfoUi {
         return InfoUi(
             id = id,
             description = description,

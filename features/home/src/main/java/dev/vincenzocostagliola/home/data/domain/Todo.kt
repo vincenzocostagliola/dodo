@@ -1,6 +1,6 @@
 package dev.vincenzocostagliola.home.data.domain
 
-data class ActivityDomain(
+data class Todo(
     val id : Int,
     val title : String,
     val description : String,

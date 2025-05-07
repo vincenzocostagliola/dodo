@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @TypeConverters(Converters::class)
-@Database(entities = [ActivityDb::class], version = 1)
+@Database(entities = [TodoDb::class], version = 1)
 abstract class DodoDB : RoomDatabase() {
     abstract fun activitiesDao(): ActivitiesDao
 

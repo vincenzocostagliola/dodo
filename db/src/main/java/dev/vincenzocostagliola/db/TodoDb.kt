@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "activities")
-data class ActivityDb(
+data class TodoDb(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo("title")
     val title: String,
