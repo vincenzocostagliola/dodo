@@ -10,12 +10,12 @@ import javax.net.ssl.SSLHandshakeException
 class ErrorManagement @Inject constructor() {
 
     fun manageException(e: Throwable): AppError {
-        Timber.Forest.d("CoinSwatchErrorManagement - manageOnException : $e")
+        Timber.Forest.d("AppErrorManagement - manageOnException : $e")
         return evaluateCause(e.cause)
     }
 
     private fun evaluateCause(cause: Throwable?): AppError {
-        Timber.Forest.d("CoinSwatchErrorManagement - evaluateCause : $cause")
+        Timber.Forest.d("AppErrorManagement - evaluateCause : $cause")
 
 
         return when (cause) {
@@ -36,7 +36,7 @@ class ErrorManagement @Inject constructor() {
     }
 
     private fun manageHttpCodeError(errorCode: Int?): AppError {
-        Timber.Forest.d("CoinSwatchErrorManagement - Status : ${errorCode}")
+        Timber.Forest.d("AppErrorManagement - Status : ${errorCode}")
         //TODO add specific error code mapping based on feature/module
         return when (errorCode) {
             400 -> {
