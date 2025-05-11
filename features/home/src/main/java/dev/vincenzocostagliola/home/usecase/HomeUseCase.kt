@@ -1,5 +1,6 @@
 package dev.vincenzocostagliola.home.usecase
 
+import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.home.data.domain.result.GetActivityResult
 import dev.vincenzocostagliola.home.data.dto.result.GetActivityResultDto
 import dev.vincenzocostagliola.home.data.repository.Repository
@@ -13,7 +14,8 @@ internal interface HomeUseCase {
 }
 
 internal class HomeUseCaseImpl @Inject internal constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    private val errorManagement: ErrorManagement
 ) : HomeUseCase {
 
     override fun getAllActivities(): Flow<GetActivityResult> {
@@ -25,7 +27,7 @@ internal class HomeUseCaseImpl @Inject internal constructor(
 
                 when (result) {
                     is GetActivityResultDto.Failure -> {
-                        emit(GetActivityResult.Failure(result.error))
+                        emit(GetActivityResult.Failure(errorManagement.manageException(result.error)))
                     }
 
                     is GetActivityResultDto.Success -> {

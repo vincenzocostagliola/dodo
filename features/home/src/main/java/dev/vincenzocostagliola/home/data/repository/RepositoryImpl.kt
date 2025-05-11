@@ -14,21 +14,37 @@ import timber.log.Timber
 internal interface Repository {
     fun getAllActivities(): Flow<GetActivityResultDto>
 }
+
 internal class RepositoryImpl(
     private val errorManagement: ErrorManagement,
     private val db: DodoDB
 ) : Repository {
 
+/*      override fun getAllActivities(): Flow<GetActivityResultDto> {
+          return flow {
+              val list: List<TodoDto> = db.activitiesDao().getAllActivities().toDto()
+              Timber.d("HomeScreen - Repository -  getAllActivities - dbList: $list")
+
+              emit(GetActivityResultDto.Success(list))
+          }.catch { e ->
+              Timber.d("HomeScreen - Repository -  getAllActivities - failure: $e")
+              val result = GetActivityResultDto.Failure(e)
+              emit(result)
+          }
+      }*/
+
     override fun getAllActivities(): Flow<GetActivityResultDto> {
         return flow {
-            val list: List<TodoDto> = db.activitiesDao().getAllActivities().toDto()
-            Timber.d("HomeScreen - Repository -  getAllActivities - dbList: $list")
+            try {
+                val list: List<TodoDto> = db.activitiesDao().getAllActivities().toDto()
+                Timber.d("HomeScreen - Repository -  getAllActivities - dbList: $list")
 
-            emit(GetActivityResultDto.Success(list))
-        }.catch { e ->
-            Timber.d("HomeScreen - Repository -  getAllActivities - failure: $e")
-            val result = GetActivityResultDto.Failure(errorManagement.manageException(e))
-            emit(result)
+                emit(GetActivityResultDto.Success(list))
+            } catch (e: Throwable) {
+                Timber.d("HomeScreen - Repository -  getAllActivities - failure: $e")
+                val result = GetActivityResultDto.Failure(e)
+                emit(result)
+            }
         }
     }
 

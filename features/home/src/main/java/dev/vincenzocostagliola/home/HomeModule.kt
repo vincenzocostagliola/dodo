@@ -25,11 +25,14 @@ class HomeModule {
         errorManagement = errorManagement,
         db = db
     )
+
     @Provides
     @Singleton
     internal fun provideUseCase(
-        repository: Repository
+        repository: Repository,
+        errorManagement: ErrorManagement
     ): HomeUseCase = HomeUseCaseImpl(
-        repository = repository
+        repository = repository,
+        errorManagement = errorManagement
     )
 }

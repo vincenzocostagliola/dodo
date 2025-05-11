@@ -46,7 +46,10 @@ internal class HomeUseCaseImplTest {
     fun setUp() {
         MockKAnnotations.init(this)
         Dispatchers.setMain(testDispatcher)
-        useCase = HomeUseCaseImpl(repository)
+        useCase = HomeUseCaseImpl(
+            repository = repository,
+            errorManagement = errorManagement
+        )
     }
 
     @After
@@ -92,10 +95,11 @@ internal class HomeUseCaseImplTest {
     @Test
     fun `getAllActivities emits Failure when repository returns failure`() = testScope.runTest {
         // Given
-        val appError = mockk<AppError.GenericError>()
+        val error = Throwable()
+        val appError = errorManagement.manageException(error)
 
         every { repository.getAllActivities() } returns flow {
-            emit(GetActivityResultDto.Failure(appError))
+            emit(GetActivityResultDto.Failure(error))
         }
 
         // When
