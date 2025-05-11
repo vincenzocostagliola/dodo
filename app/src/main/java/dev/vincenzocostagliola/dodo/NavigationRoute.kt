@@ -1,6 +1,6 @@
-package dev.vincenzocostagliola.data.navigation
+package dev.vincenzocostagliola.dodo
 
-sealed class NavigationRoute() {
+internal sealed class NavigationRoute() {
     abstract val route: String
 
     data object Home : NavigationRoute() {

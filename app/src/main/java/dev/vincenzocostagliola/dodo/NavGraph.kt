@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import dev.vincenzocostagliola.data.navigation.NavigationRoute
+import dev.vincenzocostagliola.dodo.NavigationRoute
 import dev.vincenzocostagliola.home.ui.HomeScreen
 import dev.vincenzocostagliola.home.ui.HomeViewModel
 import timber.log.Timber
@@ -16,7 +16,7 @@ import dev.vincenzocostagliola.details.ui.DetailsScreen
 
 
 @Composable
-fun NavGraph(navController: NavHostController) {
+internal fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = NavigationRoute.Home.route) {
         composable(NavigationRoute.Home.route) {
             val viewModel = hiltViewModel<HomeViewModel>()
@@ -32,10 +32,10 @@ fun NavGraph(navController: NavHostController) {
                 type = NavType.IntType
             })
         ) { backStackEntry ->
-            val coinId =
-                backStackEntry.arguments?.getString(NavigationRoute.DetailsScreen.argumentId)
+            val id: Int? =
+                backStackEntry.arguments?.getInt(NavigationRoute.DetailsScreen.argumentId)
 
-            Timber.d("Navigation - received coinId = $coinId")
+            Timber.d("Navigation - received id = $id")
             val viewModel = hiltViewModel<DetailsViewModel>()
             val onBackPressed: () -> Unit = { navController.popBackStack() }
             DetailsScreen(

@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.Packaging
+import org.gradle.internal.impldep.org.codehaus.plexus.util.MatchPatterns.from
 
 plugins {
     alias(libs.plugins.android.application)
@@ -47,8 +48,11 @@ android {
 
     buildToolsVersion = "35.0.0"
 
-
-    packagingOptions.resources.merges.addAll(listOf("META-INF/LICENSE.md"))
+    packaging {
+        resources {
+            excludes += "**/*"
+        }
+    }
 }
 
 dependencies {
