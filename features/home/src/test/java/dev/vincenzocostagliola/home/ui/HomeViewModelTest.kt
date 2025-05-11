@@ -1,6 +1,7 @@
 package dev.vincenzocostagliola.home.ui
 
 import dev.vincenzocostagliola.data.error.AppError
+import dev.vincenzocostagliola.home.createTodoDtoList
 import dev.vincenzocostagliola.home.data.domain.result.GetActivityResult
 import dev.vincenzocostagliola.home.usecase.HomeUseCase
 import io.mockk.MockKAnnotations
@@ -45,20 +46,46 @@ internal class HomeViewModelTest {
     }
 
     @Test
-    fun `getAllActivities returns Success state when data is returned`() = testScope.runTest {
-        every { homeUseCase.getAllActivities() } returns flow {
-            emit(GetActivityResult.Success(emptyList()))
+    fun `getAllActivities returns Success state when data is returned with emptyList`() =
+        testScope.runTest {
+            every { homeUseCase.getAllActivities() } returns flow {
+                emit(GetActivityResult.Success(emptyList()))
+            }
+
+            createViewModel()
+            vm.sendEvent(HomeScreenEvents.GetAllActivities)
+
+            val result = vm.homeScreenState
+                .filterIsInstance<HomeScreenState.Success>()
+                .first()
+
+            assertEquals(HomeScreenState.Success(emptyList()), result)
         }
 
-        createViewModel()
-        vm.sendEvent(HomeScreenEvents.GetAllActivities)
+    @Test
+    fun `getAllActivities returns Success state when data is returned with filledList`() =
+        testScope.runTest {
+            val dtoList = createTodoDtoList()
 
-        val result = vm.homeScreenState
-            .filterIsInstance<HomeScreenState.Success>()
-            .first()
+            every { homeUseCase.getAllActivities() } returns flow {
 
-        assertEquals(HomeScreenState.Success(emptyList()), result)
-    }
+                emit(GetActivityResult.Success(dtoList.map { it.toDomain() }))
+            }
+
+            createViewModel()
+            vm.sendEvent(HomeScreenEvents.GetAllActivities)
+
+            val result = vm.homeScreenState
+                .filterIsInstance<HomeScreenState.Success>()
+                .first()
+
+            assertEquals(
+                HomeScreenState.Success(
+                    dtoList
+                        .map { it.toDomain() }
+                        .map { it.toInfoUi() }
+                ), result)
+        }
 
     @Test
     fun `getAllActivities returns Error state when an error occurs`() = testScope.runTest {

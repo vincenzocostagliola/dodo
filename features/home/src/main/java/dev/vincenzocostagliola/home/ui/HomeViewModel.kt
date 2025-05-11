@@ -95,15 +95,15 @@ class HomeViewModel @Inject internal constructor(
             }
         }
     }
+}
 
-    private fun Todo.toInfoUi(): InfoUi {
-        return InfoUi(
-            id = id,
-            description = description,
-            name = title,
-            status = status,
-            image = null
-        )
-    }
-
+@VisibleForTesting
+internal fun Todo.toInfoUi(): InfoUi {
+    return InfoUi(
+        id = id,
+        description = description,
+        name = title,
+        status = status,
+        image = null
+    )
 }
