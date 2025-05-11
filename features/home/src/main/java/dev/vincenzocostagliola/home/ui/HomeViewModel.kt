@@ -68,16 +68,19 @@ class HomeViewModel @Inject internal constructor(
     }
 
     private suspend fun getAllActivities() {
+        Timber.d("HomeScreen - HomeViewModel -  getAllActivities")
+
         _homeScreenState.update {
             HomeScreenState.Loading
         }
 
         useCase.getAllActivities().collect {
+            Timber.d("HomeScreen - HomeViewModel -  getAllActivities : $it")
             executeCollect(it)
         }
     }
 
-    private fun executeCollect(result: GetActivityResult){
+    private fun executeCollect(result: GetActivityResult) {
         with(Dispatchers.Main) {
             when (result) {
                 is GetActivityResult.Failure -> _homeScreenState.update {

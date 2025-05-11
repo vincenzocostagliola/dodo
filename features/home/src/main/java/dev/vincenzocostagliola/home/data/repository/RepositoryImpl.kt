@@ -6,6 +6,7 @@ import dev.vincenzocostagliola.db.DodoDB
 import dev.vincenzocostagliola.home.data.dto.TodoDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 
 internal interface Repository {
     suspend fun getAllActivities(): Flow<List<TodoDto>>
@@ -18,7 +19,7 @@ internal class RepositoryImpl(
 
     override suspend fun getAllActivities(): Flow<List<TodoDto>> {
         return flow {
-          //  val list: List<ActivityDto> = db.activitiesDao().getAllActivities().toDto()
+            //  val list: List<ActivityDto> = db.activitiesDao().getAllActivities().toDto()
             //TODO to remove is just for test
             val list: List<TodoDto> = listOf(
                 TodoDto(
@@ -58,6 +59,8 @@ internal class RepositoryImpl(
                     status = "aenean"
                 ),
             )
+            Timber.d("HomeScreen - Repository -  getAllActivities : $list")
+
             emit(list)
         }
     }
