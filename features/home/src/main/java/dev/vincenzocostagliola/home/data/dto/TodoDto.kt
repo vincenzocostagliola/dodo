@@ -23,7 +23,6 @@ internal data class TodoDto(
 
     fun toTodoDb(): TodoDb {
         return TodoDb(
-            id = id,
             title = title,
             description = description,
             addedDate = addedDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),

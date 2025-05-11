@@ -4,6 +4,7 @@ import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.db.TodoDb
 import dev.vincenzocostagliola.db.DodoDB
 import dev.vincenzocostagliola.home.data.dto.TodoDto
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emitAll
@@ -32,6 +33,7 @@ internal class RepositoryImpl(
             if(firstList.size < 2) {
                 createFakeList().forEach {
                     db.activitiesDao().insertTodo(it.toTodoDb())
+                    Timber.d("HomeScreen - Repository -  Insert to DB - $it")
                 }
             }
             val list: List<TodoDto> = db.activitiesDao().getAllActivities().toDto()
@@ -53,14 +55,14 @@ internal class RepositoryImpl(
                     addedDate = OffsetDateTime.now()
                 ),
                 TodoDto(
-                    id = 9091,
+                    id = 9092,
                     title = "consectetuer",
                     description = "cubilia",
                     status = "aenean",
                     addedDate = OffsetDateTime.now().plusDays(1)
                 ),
                 TodoDto(
-                    id = 9091,
+                    id = 9093,
                     title = "consectetuer",
                     description = "cubilia",
                     status = "aenean",
