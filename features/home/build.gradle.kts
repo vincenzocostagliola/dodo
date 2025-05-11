@@ -63,8 +63,5 @@ dependencies {
 
     /**TEST**/
     implementation(libs.bundles.test)
-    // To use the JUnit Extension APIs
-    androidTestImplementation (libs.ext.junit)
-    // Kotlin extensions for androidx.test.ext.junit
-    androidTestImplementation( libs.androidx.junit.ktx)
+    androidTestImplementation(libs.bundles.androidimplementationtest)
 }

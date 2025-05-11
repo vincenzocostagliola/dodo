@@ -138,6 +138,11 @@ test = [
     "coroutineTest"
 ]
 
+androidimplementationtest = [
+    "ext-junit",
+    "androidx-junit-ktx",
+]
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
