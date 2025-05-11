@@ -3,7 +3,7 @@ package dev.vincenzocostagliola.home.usecase
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.home.data.domain.result.GetActivityResult
 import dev.vincenzocostagliola.home.data.dto.result.GetActivityResultDto
-import dev.vincenzocostagliola.home.data.repository.Repository
+import dev.vincenzocostagliola.home.repository.Repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber

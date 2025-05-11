@@ -6,8 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.db.DodoDB
-import dev.vincenzocostagliola.home.data.repository.Repository
-import dev.vincenzocostagliola.home.data.repository.RepositoryImpl
+import dev.vincenzocostagliola.home.repository.Repository
+import dev.vincenzocostagliola.home.repository.RepositoryImpl
 import dev.vincenzocostagliola.home.usecase.HomeUseCase
 import dev.vincenzocostagliola.home.usecase.HomeUseCaseImpl
 import javax.inject.Singleton

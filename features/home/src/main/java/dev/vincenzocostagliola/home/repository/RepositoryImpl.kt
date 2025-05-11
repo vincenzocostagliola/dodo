@@ -1,4 +1,4 @@
-package dev.vincenzocostagliola.home.data.repository
+package dev.vincenzocostagliola.home.repository
 
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.db.DodoDB
@@ -6,7 +6,6 @@ import dev.vincenzocostagliola.db.TodoDb
 import dev.vincenzocostagliola.home.data.dto.TodoDto
 import dev.vincenzocostagliola.home.data.dto.result.GetActivityResultDto
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import org.threeten.bp.OffsetDateTime
 import timber.log.Timber

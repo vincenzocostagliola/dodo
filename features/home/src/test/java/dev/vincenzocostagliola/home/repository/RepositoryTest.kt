@@ -6,7 +6,6 @@ import dev.vincenzocostagliola.db.ActivitiesDao
 import dev.vincenzocostagliola.db.DodoDB
 import dev.vincenzocostagliola.db.TodoDb
 import dev.vincenzocostagliola.home.data.dto.result.GetActivityResultDto
-import dev.vincenzocostagliola.home.data.repository.RepositoryImpl
 import io.mockk.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
