@@ -58,4 +58,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":db"))
     implementation(project(":designsystem"))
+
+    /**TEST**/
+    implementation(libs.bundles.test)
 }

@@ -5,8 +5,10 @@ kotlin = "2.0.21"
 coreKtx = "1.16.0"
 dagger_hilt = "2.51.1"
 
+#test
 junit = "4.13.2"
-junitVersion = "1.2.1"
+junitVersion = "1.8.1"
+mockk = "1.13.5"
 
 lifecycleRuntimeKtx = "2.8.7"
 navigationCompose = "2.8.9"
@@ -44,6 +46,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "junitVersion" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "junitVersion" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 #Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -116,6 +119,14 @@ compose = [
     "androidx-navigation-compose"]
 
 room = ["room_runtime", "room_ktx"]
+
+test = [
+    "junit",
+    "androidx-junit",
+    "androidx-ui-test-manifest",
+    "androidx-ui-test-junit4",
+    "mockk"
+]
 
 
 [plugins]
