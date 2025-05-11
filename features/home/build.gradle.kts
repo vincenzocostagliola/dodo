@@ -47,6 +47,9 @@ dependencies {
     /**SERIALIZATION*/
     implementation(libs.kotlin.serialization)
 
+    implementation(libs.androidx.hilt.navigation.compose)
+
+
     /**DATE TIME*/
     implementation(libs.threeTen)
     /**NETWORK*/
