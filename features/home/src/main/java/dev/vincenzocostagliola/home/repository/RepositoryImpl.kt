@@ -15,7 +15,6 @@ internal interface Repository {
 }
 
 internal class RepositoryImpl(
-    private val errorManagement: ErrorManagement,
     private val db: DodoDB
 ) : Repository {
 

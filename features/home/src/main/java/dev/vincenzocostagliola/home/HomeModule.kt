@@ -19,10 +19,8 @@ class HomeModule {
     @Provides
     @Singleton
     internal fun provideRepository(
-        errorManagement: ErrorManagement,
         db: DodoDB
     ): Repository = RepositoryImpl(
-        errorManagement = errorManagement,
         db = db
     )
 

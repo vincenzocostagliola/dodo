@@ -39,9 +39,8 @@ internal class RepositoryImplTest {
             every { activitiesDao() } returns dao
         }
         error = mockk<AppError.ErrorGenericCause>()
-        errorManagement = mockk()
 
-        repository = RepositoryImpl(errorManagement, db)
+        repository = RepositoryImpl( db)
     }
 
     @After
