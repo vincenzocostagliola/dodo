@@ -8,8 +8,8 @@ sealed class NavigationRoute() {
     }
 
     data object DetailsScreen : NavigationRoute() {
-        fun createRoute(coinId: String) = "$screenName?$argumentId=${coinId}"
-        const val argumentId: String = "coinId"
+        fun createRoute(id: Int) = "$screenName?$argumentId=${id}"
+        const val argumentId: String = "id"
         private val screenName: String = "DetailScreen"
         override val route: String = "$screenName?$argumentId={$argumentId}"
     }

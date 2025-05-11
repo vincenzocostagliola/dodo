@@ -26,20 +26,19 @@ import dev.vincenzocostagliola.designsystem.values.Dimens
 import timber.log.Timber
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, navigateToDetail: () -> Unit) {
+fun HomeScreen(viewModel: HomeViewModel, navigateToDetail: (Int) -> Unit) {
     val state: State<HomeScreenState> = viewModel.homeScreenState.collectAsState()
     val viewState = state.value
     Timber.d("HomeScreen - ViewState: $viewState")
 
     ManageState(viewState, viewModel, navigateToDetail)
-    //viewModel.sendEvent(HomeScreenEvents.GetAllActivities)
 }
 
 @Composable
 private fun ManageState(
     viewState: HomeScreenState,
     viewModel: HomeViewModel,
-    navigateToDetail: () -> Unit
+    navigateToDetail: (Int) -> Unit
 ) {
     when (viewState) {
         is HomeScreenState.Error -> {
@@ -58,7 +57,7 @@ private fun ManageState(
                 viewState.list,
                 onClick = { id ->
                     Timber.d("App Navigation - sent = $id")
-                    navigateToDetail
+                    navigateToDetail(id)
                 },
                 refresh = {
                     viewModel.sendEvent(HomeScreenEvents.GetAllActivities)

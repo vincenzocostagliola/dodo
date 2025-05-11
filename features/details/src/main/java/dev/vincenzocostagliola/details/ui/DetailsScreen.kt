@@ -1,15 +1,10 @@
 package dev.vincenzocostagliola.details.ui
 
-import android.telecom.Call
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -26,7 +21,7 @@ import dev.vincenzocostagliola.designsystem.values.Dimens
 import timber.log.Timber
 
 @Composable
-fun Screen(viewModel: DetailsViewModel, navigateBack: () -> Unit) {
+fun DetailsScreen(viewModel: DetailsViewModel, navigateBack: () -> Unit) {
     val state: State<ScreenState> = viewModel.screenState.collectAsState()
     val viewState = state.value
     Timber.d("HomeScreen - ViewState: $viewState")
