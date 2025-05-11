@@ -1,6 +1,7 @@
 package dev.vincenzocostagliola.home.usecase
 
 import dev.vincenzocostagliola.home.data.domain.result.GetActivityResult
+import dev.vincenzocostagliola.home.data.dto.result.GetActivityResultDto
 import dev.vincenzocostagliola.home.data.repository.Repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -19,9 +20,20 @@ internal class HomeUseCaseImpl @Inject internal constructor(
         Timber.d("HomeScreen - HomeUseCase - getAllActivities")
 
         return flow {
-            repository.getAllActivities().collect {
-                Timber.d("HomeScreen - HomeUseCase -  getAllActivities : $it")
-                emit(GetActivityResult.Success(it.map { it.toDomain() }))
+            repository.getAllActivities().collect { result ->
+                Timber.d("HomeScreen - HomeUseCase -  getAllActivities : $result")
+
+                when (result) {
+                    is GetActivityResultDto.Failure -> {
+                        emit(GetActivityResult.Failure(result.error))
+                    }
+
+                    is GetActivityResultDto.Success -> {
+                        emit(GetActivityResult.Success(result.list.map { it.toDomain() }))
+                    }
+                }
+
+
             }
         }
     }
