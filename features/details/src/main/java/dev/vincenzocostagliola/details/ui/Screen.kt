@@ -1,5 +1,6 @@
 package dev.vincenzocostagliola.details.ui
 
+import android.telecom.Call
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -21,18 +22,16 @@ import dev.vincenzocostagliola.designsystem.composables.InfoUi
 import dev.vincenzocostagliola.designsystem.composables.Progress
 import dev.vincenzocostagliola.designsystem.composables.ShortInfoListItem
 import dev.vincenzocostagliola.designsystem.theme.ExtraLight
-import dev.vincenzocostagliola.designsystem.theme.Purple40
 import dev.vincenzocostagliola.designsystem.values.Dimens
 import timber.log.Timber
 
 @Composable
-fun HomeScreen(viewModel: DetailsViewModel, navigateBack: () -> Unit) {
+fun Screen(viewModel: DetailsViewModel, navigateBack: () -> Unit) {
     val state: State<ScreenState> = viewModel.screenState.collectAsState()
     val viewState = state.value
     Timber.d("HomeScreen - ViewState: $viewState")
 
     ManageState(viewState, viewModel, navigateBack)
-    //viewModel.sendEvent(HomeScreenEvents.GetAllActivities)
 }
 
 @Composable

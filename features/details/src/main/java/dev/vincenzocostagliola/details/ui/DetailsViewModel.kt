@@ -32,7 +32,7 @@ sealed class ScreenEvents {
 }
 
 @HiltViewModel
-internal class DetailsViewModel @Inject internal constructor(
+class DetailsViewModel @Inject internal constructor(
     private val useCase: UseCase
 ) : ViewModel() {
 
