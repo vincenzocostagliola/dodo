@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.zip
+import org.threeten.bp.OffsetDateTime
 import timber.log.Timber
 
 internal interface Repository {
@@ -25,11 +26,19 @@ internal class RepositoryImpl(
 
     override suspend fun getAllActivities(): Flow<List<TodoDto>> {
         return flow {
+            val firstList = db.activitiesDao().getAllActivities()
+            Timber.d("HomeScreen - Repository -  getAllActivities - dbList: $firstList")
+
+            if(firstList.size < 2) {
+                createFakeList().forEach {
+                    db.activitiesDao().insertTodo(it.toTodoDb())
+                }
+            }
             val list: List<TodoDto> = db.activitiesDao().getAllActivities().toDto()
             Timber.d("HomeScreen - Repository -  getAllActivities - dbList: $list")
 
 
-            emit(list + createFakeList())
+            emit(list)
         }
     }
 
@@ -40,37 +49,43 @@ internal class RepositoryImpl(
                     id = 9091,
                     title = "consectetuer",
                     description = "cubilia",
-                    status = "aenean"
+                    status = "aenean",
+                    addedDate = OffsetDateTime.now()
                 ),
                 TodoDto(
                     id = 9091,
                     title = "consectetuer",
                     description = "cubilia",
-                    status = "aenean"
+                    status = "aenean",
+                    addedDate = OffsetDateTime.now().plusDays(1)
                 ),
                 TodoDto(
                     id = 9091,
                     title = "consectetuer",
                     description = "cubilia",
-                    status = "aenean"
+                    status = "aenean",
+                    addedDate = OffsetDateTime.now().plusDays(2)
                 ),
                 TodoDto(
                     id = 9091,
                     title = "consectetuer",
                     description = "cubilia",
-                    status = "aenean"
+                    status = "aenean",
+                    addedDate = OffsetDateTime.now().plusDays(2)
                 ),
                 TodoDto(
                     id = 9091,
                     title = "consectetuer",
                     description = "cubilia",
-                    status = "aenean"
+                    status = "aenean",
+                    addedDate = OffsetDateTime.now().plusDays(3)
                 ),
                 TodoDto(
                     id = 9091,
                     title = "consectetuer",
                     description = "cubilia",
-                    status = "aenean"
+                    status = "aenean",
+                    addedDate = OffsetDateTime.now().plusDays(4)
                 ),
             )
             Timber.d("HomeScreen - Repository -  getAllActivities  - fakeList: $list")
@@ -84,7 +99,8 @@ internal class RepositoryImpl(
                     id = id,
                     title = title,
                     description = description,
-                    status = status
+                    status = status,
+                    addedDate = OffsetDateTime.parse(addedDate)
                 )
             }
         }

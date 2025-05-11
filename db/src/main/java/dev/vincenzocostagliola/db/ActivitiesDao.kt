@@ -3,13 +3,14 @@ package dev.vincenzocostagliola.db
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
 interface ActivitiesDao {
 
-    @Insert
-    suspend fun insertActivity(todo: TodoDb)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTodo(todo: TodoDb)
 
     @Delete
     suspend fun deleteActivity(todo: TodoDb)
