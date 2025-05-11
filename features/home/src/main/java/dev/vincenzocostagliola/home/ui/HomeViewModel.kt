@@ -1,5 +1,6 @@
 package dev.vincenzocostagliola.home.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -67,6 +68,7 @@ class HomeViewModel @Inject internal constructor(
         }
     }
 
+    @VisibleForTesting
     private suspend fun getAllActivities() {
         Timber.d("HomeScreen - HomeViewModel -  getAllActivities")
 
