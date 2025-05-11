@@ -1,10 +1,10 @@
 package dev.vincenzocostagliola.details.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.FloatingActionButton
@@ -26,42 +26,39 @@ import dev.vincenzocostagliola.designsystem.values.Dimens
 import timber.log.Timber
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, navigateToDetail: () -> Unit) {
-    val state: State<HomeScreenState> = viewModel.homeScreenState.collectAsState()
+fun HomeScreen(viewModel: DetailsViewModel, navigateBack: () -> Unit) {
+    val state: State<ScreenState> = viewModel.screenState.collectAsState()
     val viewState = state.value
     Timber.d("HomeScreen - ViewState: $viewState")
 
-    ManageState(viewState, viewModel, navigateToDetail)
+    ManageState(viewState, viewModel, navigateBack)
     //viewModel.sendEvent(HomeScreenEvents.GetAllActivities)
 }
 
 @Composable
 private fun ManageState(
-    viewState: HomeScreenState,
-    viewModel: HomeViewModel,
+    viewState: ScreenState,
+    viewModel: DetailsViewModel,
     navigateToDetail: () -> Unit
 ) {
     when (viewState) {
-        is HomeScreenState.Error -> {
+        is ScreenState.Error -> {
             ShowError(viewState.error.newResources) {
-                viewModel.sendEvent(HomeScreenEvents.PerformDialogAction(it))
+                viewModel.sendEvent(ScreenEvents.PerformDialogAction(it))
             }
         }
 
-        HomeScreenState.Loading -> {
+        ScreenState.Loading -> {
             Progress(true)
         }
 
-        is HomeScreenState.Success -> {
+        is ScreenState.Success -> {
             Progress(false)
-            ShowList(
-                viewState.list,
+            ShowTodo(
+                viewState.todo,
                 onClick = { id ->
                     Timber.d("App Navigation - sent = $id")
                     navigateToDetail
-                },
-                refresh = {
-                    viewModel.sendEvent(HomeScreenEvents.GetAllActivities)
                 }
             )
         }
@@ -78,32 +75,22 @@ private fun ShowError(newResources: ErrorResources, performAction: (DialogAction
 }
 
 @Composable
-private fun ShowList(list: List<InfoUi>, onClick: (Int) -> Unit, refresh: () -> Unit) {
+private fun ShowTodo(info: InfoUi, onClick: (Int) -> Unit) {
     Scaffold(
         modifier = Modifier
             .background(ExtraLight),
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = refresh,
-                containerColor = Purple40,
-                contentColor = ExtraLight
-            ) {
-                Icon(Icons.Filled.Refresh, "")
-            }
-        },
         content = { innerPadding ->
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = Dimens.XRegular)
                     .consumeWindowInsets(innerPadding)
             ) {
-                items(list.size) { item ->
+
                     ShortInfoListItem (
-                        info = list[item],
+                        info = info,
                         onClick = onClick
                     )
-                }
             }
         }
     )

@@ -1,7 +1,7 @@
 package dev.vincenzocostagliola.details.data.dto
 
 import dev.vincenzocostagliola.db.TodoDb
-import dev.vincenzocostagliola.home.data.domain.Todo
+import dev.vincenzocostagliola.details.data.domain.Todo
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 

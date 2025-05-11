@@ -6,10 +6,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.db.DodoDB
-import dev.vincenzocostagliola.home.repository.Repository
-import dev.vincenzocostagliola.home.repository.RepositoryImpl
-import dev.vincenzocostagliola.home.usecase.HomeUseCase
-import dev.vincenzocostagliola.home.usecase.HomeUseCaseImpl
+import dev.vincenzocostagliola.details.repository.Repository
+import dev.vincenzocostagliola.details.repository.RepositoryImpl
+import dev.vincenzocostagliola.details.usecase.UseCase
+import dev.vincenzocostagliola.details.usecase.UseCaseImpl
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -29,7 +29,7 @@ class DetailsModule {
     internal fun provideUseCase(
         repository: Repository,
         errorManagement: ErrorManagement
-    ): HomeUseCase = HomeUseCaseImpl(
+    ): UseCase = UseCaseImpl(
         repository = repository,
         errorManagement = errorManagement
     )

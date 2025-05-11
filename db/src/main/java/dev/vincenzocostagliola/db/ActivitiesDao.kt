@@ -19,7 +19,7 @@ interface ActivitiesDao {
     suspend fun getAllActivities(): List<TodoDb>
 
     @Query("SELECT * FROM activities WHERE id = :id")
-    suspend fun getComic(id: Int): TodoDb?
+    suspend fun getTodo(id: Int): TodoDb?
 
     @Query("SELECT * FROM activities WHERE status = :status")
     suspend fun getActivitiesByStatus(status: String): List<TodoDb>
