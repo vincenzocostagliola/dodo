@@ -130,8 +130,8 @@ room = ["room_runtime", "room_ktx"]
 
 test = [
     "junit",
-    "androidx-ui-test-manifest",
-    "androidx-ui-test-junit4",
+   # "androidx-ui-test-manifest",
+   # "androidx-ui-test-junit4",
     "mockk",
     "coroutineTest"
 ]

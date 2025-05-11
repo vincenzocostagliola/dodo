@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.Packaging
 import org.gradle.kotlin.dsl.androidTestImplementation
 
 plugins {
@@ -63,5 +64,6 @@ dependencies {
 
     /**TEST**/
     implementation(libs.bundles.test)
+    compileOnly(libs.junit)
     androidTestImplementation(libs.bundles.androidimplementationtest)
 }
