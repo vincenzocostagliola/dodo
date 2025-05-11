@@ -7,7 +7,7 @@ import dev.vincenzocostagliola.home.data.dto.TodoDto
 import dev.vincenzocostagliola.home.data.dto.result.GetActivityResultDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.channelFlow
 import org.threeten.bp.OffsetDateTime
 import timber.log.Timber
 
@@ -20,30 +20,18 @@ internal class RepositoryImpl(
     private val db: DodoDB
 ) : Repository {
 
-/*      override fun getAllActivities(): Flow<GetActivityResultDto> {
-          return flow {
-              val list: List<TodoDto> = db.activitiesDao().getAllActivities().toDto()
-              Timber.d("HomeScreen - Repository -  getAllActivities - dbList: $list")
-
-              emit(GetActivityResultDto.Success(list))
-          }.catch { e ->
-              Timber.d("HomeScreen - Repository -  getAllActivities - failure: $e")
-              val result = GetActivityResultDto.Failure(e)
-              emit(result)
-          }
-      }*/
 
     override fun getAllActivities(): Flow<GetActivityResultDto> {
-        return flow {
+        return channelFlow {
             try {
                 val list: List<TodoDto> = db.activitiesDao().getAllActivities().toDto()
                 Timber.d("HomeScreen - Repository -  getAllActivities - dbList: $list")
 
-                emit(GetActivityResultDto.Success(list))
+                send(GetActivityResultDto.Success(list))
             } catch (e: Throwable) {
                 Timber.d("HomeScreen - Repository -  getAllActivities - failure: $e")
                 val result = GetActivityResultDto.Failure(e)
-                emit(result)
+                send(result)
             }
         }
     }
