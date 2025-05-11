@@ -20,11 +20,11 @@ internal class UseCaseImpl @Inject internal constructor(
 ) : UseCase {
 
     override fun getTodo(id: Int): Flow<GetActivityResult> {
-        Timber.d("HomeScreen - HomeUseCase - getAllActivities")
+        Timber.d("DetailsScreen - UseCase - getAllActivities")
 
         return flow {
             repository.getTodo(id).collect { result ->
-                Timber.d("HomeScreen - HomeUseCase -  getAllActivities : $result")
+                Timber.d("DetailsScreen - UseCase -  getAllActivities : $result")
 
                 when (result) {
                     is GetActivityResultDto.Failure -> {

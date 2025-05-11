@@ -32,7 +32,7 @@ sealed class ScreenEvents {
 }
 
 @HiltViewModel
-class DetailsViewModel @Inject internal constructor(
+internal class DetailsViewModel @Inject internal constructor(
     private val useCase: UseCase
 ) : ViewModel() {
 
@@ -42,7 +42,7 @@ class DetailsViewModel @Inject internal constructor(
         get() = _screenState
 
     fun sendEvent(event: ScreenEvents) {
-        Timber.d("HomeScreen - HomeScreenEvents: $event")
+        Timber.d("DetailsScreen - screenEvents: $event")
         viewModelScope.launch() {
             when (event) {
                 is ScreenEvents.GetTodo -> retrieveToDo(event.id)
@@ -70,14 +70,14 @@ class DetailsViewModel @Inject internal constructor(
 
         savedId = id
 
-        Timber.d("HomeScreen - HomeViewModel -  retrieveToDo")
+        Timber.d("DetailsScreen - DetailsViewModel -  retrieveToDo")
 
         _screenState.update {
             ScreenState.Loading
         }
 
         useCase.getTodo(id).collect {
-            Timber.d("HomeScreen - HomeViewModel -  retrieveToDo : $it")
+            Timber.d("DetailsScreen - DetailsViewModel -  retrieveToDo : $it")
             executeCollect(it)
         }
     }

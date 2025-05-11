@@ -22,7 +22,7 @@ internal class RepositoryImpl(
         return channelFlow {
             try {
                 val todo: TodoDto? = db.activitiesDao().getTodo(id)?.toDto()
-                Timber.d("HomeScreen - Repository -  getAllActivities - db: $todo")
+                Timber.d("DetailsScreen - Repository -  getAllActivities - db: $todo")
 
                 if (todo != null) {
                     send(GetActivityResultDto.Success(todo))
@@ -31,7 +31,7 @@ internal class RepositoryImpl(
                 }
 
             } catch (e: Throwable) {
-                Timber.d("HomeScreen - Repository -  getAllActivities - failure: $e")
+                Timber.d("DetailsScreen - Repository -  getAllActivities - failure: $e")
                 val result = GetActivityResultDto.Failure(e)
                 send(result)
             }
