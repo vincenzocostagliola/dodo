@@ -1,3 +1,10 @@
+@file:Suppress("DSL_SCOPE_VIOLATION")
+
+import com.android.build.api.dsl.Packaging
+
+//Because of https://github.com/gradle/gradle/issues/22797
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -44,6 +51,22 @@ android {
     }
 
     buildToolsVersion = "35.0.0"
+
+    fun Packaging.() {
+        resources.excludes.add("META-INF/DEPENDENCIES")
+        resources.excludes.add("META-INF/LICENSE")
+        resources.excludes.add("META-INF/LICENSE.md")
+        resources.excludes.add("META-INF/LICENSE.txt")
+        resources.excludes.add("META-INF/license.txt")
+        resources.excludes.add("META-INF/NOTICE")
+        resources.excludes.add("META-INF/NOTICE.txt")
+        resources.excludes.add("META-INF/notice.txt")
+        resources.excludes.add("META-INF/ASL2.0")
+        resources.excludes.add("META-INF/*.kotlin_module")
+        resources.excludes.add("META-INF/*")
+        resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+
+    }
 }
 
 dependencies {
