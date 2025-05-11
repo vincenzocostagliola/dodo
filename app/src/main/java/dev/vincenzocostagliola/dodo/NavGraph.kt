@@ -39,7 +39,8 @@ internal fun NavGraph(navController: NavHostController) {
             val viewModel = hiltViewModel<DetailsViewModel>()
             val onBackPressed: () -> Unit = { navController.popBackStack() }
             DetailsScreen(
-                viewModel = viewModel
+                viewModel = viewModel,
+                idToShow = id
             ) { onBackPressed }
         }
 

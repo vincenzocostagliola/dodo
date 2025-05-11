@@ -18,14 +18,15 @@ import dev.vincenzocostagliola.designsystem.composables.Progress
 import dev.vincenzocostagliola.designsystem.composables.ShortInfoListItem
 import dev.vincenzocostagliola.designsystem.theme.ExtraLight
 import dev.vincenzocostagliola.designsystem.values.Dimens
+import dev.vincenzocostagliola.details.ui.ScreenEvents.GetTodo
 import timber.log.Timber
 
 @Composable
-fun DetailsScreen(viewModel: DetailsViewModel, navigateBack: () -> Unit) {
+fun DetailsScreen(viewModel: DetailsViewModel, idToShow: Int?, navigateBack: () -> Unit) {
     val state: State<ScreenState> = viewModel.screenState.collectAsState()
     val viewState = state.value
-    Timber.d("HomeScreen - ViewState: $viewState")
-
+    Timber.d("DetailsScreen - ViewState: $viewState")
+    viewModel.sendEvent(GetTodo(idToShow))
     ManageState(viewState, viewModel, navigateBack)
 }
 
@@ -81,10 +82,10 @@ private fun ShowTodo(info: InfoUi, onClick: (Int) -> Unit) {
                     .consumeWindowInsets(innerPadding)
             ) {
 
-                    ShortInfoListItem (
-                        info = info,
-                        onClick = onClick
-                    )
+                ShortInfoListItem(
+                    info = info,
+                    onClick = onClick
+                )
             }
         }
     )

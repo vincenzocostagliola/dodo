@@ -26,7 +26,7 @@ internal sealed class ScreenState {
 }
 
 sealed class ScreenEvents {
-    data class GetTodo(val id: Int) : ScreenEvents()
+    data class GetTodo(val id: Int?) : ScreenEvents()
     data class PerformDialogAction(val dialogAction: DialogAction) : ScreenEvents()
 
 }
@@ -66,19 +66,29 @@ class DetailsViewModel @Inject internal constructor(
     private var savedId: Int = 0
 
     @VisibleForTesting
-    private suspend fun retrieveToDo(id: Int) {
+    private suspend fun retrieveToDo(id: Int?) {
 
-        savedId = id
+        savedId = id ?: 0
 
         Timber.d("DetailsScreen - DetailsViewModel -  retrieveToDo")
 
+        showLoading()
+
+        id?.let {
+            useCase.getTodo(id).collect {
+                Timber.d("DetailsScreen - DetailsViewModel -  retrieveToDo : $it")
+                executeCollect(it)
+            }
+        } ?: {
+            _screenState.update {
+                ScreenState.Error(AppError.GenericError)
+            }
+        }
+    }
+
+    private fun showLoading() {
         _screenState.update {
             ScreenState.Loading
-        }
-
-        useCase.getTodo(id).collect {
-            Timber.d("DetailsScreen - DetailsViewModel -  retrieveToDo : $it")
-            executeCollect(it)
         }
     }
 

@@ -56,7 +56,7 @@ private fun ManageState(
             ShowList(
                 viewState.list,
                 onClick = { id ->
-                    Timber.d("App Navigation - sent = $id")
+                    Timber.d("HomeScreen - App Navigation - sent = $id")
                     navigateToDetail(id)
                 },
                 refresh = {
