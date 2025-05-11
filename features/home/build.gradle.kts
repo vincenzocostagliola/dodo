@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.vincenzocostagliola.coindetails"
+    namespace = "dev.vincenzocostagliola.home"
     testNamespace = "dev.vincenzocostagliola"
     compileSdk = 35
     defaultConfig {
@@ -64,6 +64,5 @@ dependencies {
 
     /**TEST**/
     implementation(libs.bundles.test)
-    compileOnly(libs.junit)
     androidTestImplementation(libs.bundles.androidimplementationtest)
 }

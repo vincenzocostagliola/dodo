@@ -1,3 +1,6 @@
+import com.android.build.api.dsl.Packaging
+import org.gradle.kotlin.dsl.androidTestImplementation
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -8,7 +11,8 @@ plugins {
 }
 
 android {
-    namespace = "dev.vincenzocostagliola.details"
+    namespace = "dev.vincenzocostagliola.home"
+    testNamespace = "dev.vincenzocostagliola"
     compileSdk = 35
     defaultConfig {
         minSdk = 26
@@ -28,10 +32,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.7"
     }
-
 }
 
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -40,17 +44,25 @@ dependencies {
     implementation(libs.androidx.material3)
     /**HILT*/
     // For hilt Implementation
-    implementation (libs.hilt)
+    implementation(libs.hilt)
     ksp(libs.hilt.compiler)
     implementation(libs.timber)
     /**SERIALIZATION*/
     implementation(libs.kotlin.serialization)
+
+    implementation(libs.androidx.hilt.navigation.compose)
+
 
     /**DATE TIME*/
     implementation(libs.threeTen)
     /**NETWORK*/
     implementation(libs.bundles.network)
     /**MODULES*/
-    // implementation(project(":data"))
+    implementation(project(":data"))
+    implementation(project(":db"))
     implementation(project(":designsystem"))
+
+    /**TEST**/
+    implementation(libs.bundles.test)
+    androidTestImplementation(libs.bundles.androidimplementationtest)
 }
