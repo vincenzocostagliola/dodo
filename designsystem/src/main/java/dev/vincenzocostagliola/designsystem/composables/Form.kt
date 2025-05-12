@@ -3,7 +3,6 @@ package dev.vincenzocostagliola.designsystem.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,11 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -31,16 +25,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import dev.vincenzocostagliola.designsystem.R
 
+data class InfoForm(
+    val id: Int,
+    val description: String,
+    val name: String,
+    val status: String,
+    val image: String?,
+    val readOnly : Boolean
+)
 
 @Composable
-fun Form() {
+fun Form(info: InfoForm) {
     val focusManager = LocalFocusManager.current
     LazyColumn(
         modifier = Modifier
@@ -49,13 +52,33 @@ fun Form() {
         contentPadding = PaddingValues(vertical = 24.dp)
     ) {
         item {
-            Photo()
+            FormField(
+                focusManager = focusManager,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                    capitalization = KeyboardCapitalization.Words
+                ),
+                label = stringResource(R.string.title),
+                imageVector = null,
+                readOnly = info.readOnly,
+                textToShow = info.name
+            )
         }
+        item { Spacer(Modifier.height(4.dp)) }
         item {
-            var imageUrl = remember { mutableStateOf<String?>(null) }
-            Box(Modifier.fillMaxWidth()) {
-                AsyncImage(model = imageUrl, contentDescription = null)
-            }
+            FormField(
+                focusManager = focusManager,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                    capitalization = KeyboardCapitalization.Words
+                ),
+                label = stringResource(R.string.description),
+                imageVector = null,
+                readOnly = info.readOnly,
+                textToShow = info.description
+            )
         }
         item {
             FormField(
@@ -65,90 +88,10 @@ fun Form() {
                     imeAction = ImeAction.Next,
                     capitalization = KeyboardCapitalization.Words
                 ),
-                label = "First name",
-                imageVector = Icons.Outlined.Person
-            )
-        }
-        item {
-            FormField(
-                focusManager = focusManager,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next,
-                    capitalization = KeyboardCapitalization.Words
-                ),
-                label = "Last name",
-                imageVector = null
-            )
-        }
-        item { Spacer(Modifier.height(4.dp)) }
-        item {
-            FormField(
-                focusManager = focusManager,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Phone,
-                    imeAction = ImeAction.Next
-                ),
-                label = "Phone number",
-                imageVector = Icons.Outlined.Phone
-            )
-        }
-        item { Spacer(Modifier.height(4.dp)) }
-        item {
-            FormField(
-                focusManager = focusManager,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Done
-                ),
-                label = "Email",
-                imageVector = Icons.Outlined.Email
-            )
-        }
-        item { Spacer(Modifier.height(4.dp)) }
-        item {
-            FormField(
-                focusManager = focusManager,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                label = "Country",
-                imageVector = Icons.Outlined.LocationOn
-            )
-        }
-        item {
-
-            FormField(
-                focusManager = focusManager,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                label = "Street address",
-                imageVector = null
-            )
-        }
-        item {
-            FormField(
-                focusManager = focusManager,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                label = "City",
-                imageVector = null
-            )
-        }
-        item {
-            FormField(
-                focusManager = focusManager,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                label = "Zip/postal code",
-                imageVector = null
+                label = stringResource(R.string.status),
+                imageVector = null,
+                readOnly = info.readOnly,
+                textToShow = info.status
             )
         }
         item {
@@ -220,5 +163,15 @@ fun Form() {
 @Preview
 @Composable
 fun PreviewForm() {
-    Form()
+    Form(
+        info = getFakeInfo()
+    )
 }
+private fun getFakeInfo(): InfoForm = InfoForm(
+    id = 1,
+    description = "This is Description",
+    name = "What to do at home",
+    status = "Doing",
+    image = null,
+    readOnly = true
+)

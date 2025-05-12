@@ -15,6 +15,7 @@ import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.data.error.ErrorResources
 import dev.vincenzocostagliola.designsystem.composables.ErrorDialog
 import dev.vincenzocostagliola.designsystem.composables.Form
+import dev.vincenzocostagliola.designsystem.composables.InfoForm
 import dev.vincenzocostagliola.designsystem.composables.InfoUi
 import dev.vincenzocostagliola.designsystem.composables.Progress
 import dev.vincenzocostagliola.designsystem.composables.TopBar
@@ -72,7 +73,7 @@ private fun ShowError(newResources: ErrorResources, performAction: (DialogAction
 }
 
 @Composable
-private fun ShowTodo(info: InfoUi, onBackPressed: () -> Unit) {
+private fun ShowTodo(info: InfoForm, onBackPressed: () -> Unit) {
     Scaffold(
         modifier = Modifier
             .background(ExtraLight),
@@ -89,7 +90,7 @@ private fun ShowTodo(info: InfoUi, onBackPressed: () -> Unit) {
                     .padding(horizontal = Dimens.XRegular)
                     .consumeWindowInsets(innerPadding)
 
-            ) { Form() }
+            ) { Form(info) }
         }
     )
 }

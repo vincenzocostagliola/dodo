@@ -33,9 +33,11 @@ fun FormField(
     focusManager: FocusManager,
     keyboardOptions: KeyboardOptions,
     label: String,
-    imageVector: ImageVector?
+    imageVector: ImageVector?,
+    textToShow : String,
+    readOnly : Boolean
 ) {
-    var text by remember { mutableStateOf("") }
+    var text by remember { mutableStateOf(textToShow) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -70,7 +72,8 @@ fun FormField(
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            singleLine = true,
+            singleLine = false,
+            readOnly = readOnly
         )
     }
 }

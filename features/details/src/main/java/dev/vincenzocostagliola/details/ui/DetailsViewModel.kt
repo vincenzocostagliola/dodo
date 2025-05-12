@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.vincenzocostagliola.data.error.AppError
 import dev.vincenzocostagliola.data.error.DialogAction
+import dev.vincenzocostagliola.designsystem.composables.InfoForm
 import dev.vincenzocostagliola.designsystem.composables.InfoUi
 import dev.vincenzocostagliola.details.data.domain.Todo
 import dev.vincenzocostagliola.details.data.domain.result.GetActivityResult
@@ -21,7 +22,7 @@ import javax.inject.Inject
 
 internal sealed class ScreenState {
     data object Loading : ScreenState()
-    data class Success(val todo: InfoUi) : ScreenState()
+    data class Success(val todo: InfoForm) : ScreenState()
     data class Error(val error: AppError) : ScreenState()
 }
 
@@ -37,7 +38,7 @@ class DetailsViewModel @Inject internal constructor(
 ) : ViewModel() {
 
     private val _screenState: MutableStateFlow<ScreenState> =
-        MutableStateFlow(ScreenState.Loading)
+        MutableStateFlow(Loading)
     internal val screenState: StateFlow<ScreenState>
         get() = _screenState
 
@@ -85,14 +86,14 @@ class DetailsViewModel @Inject internal constructor(
             }
         } ?: {
             _screenState.update {
-                ScreenState.Error(AppError.GenericError)
+                Error(AppError.GenericError)
             }
         }
     }
 
     private fun showLoading() {
         _screenState.update {
-            ScreenState.Loading
+            Loading
         }
     }
 
@@ -104,7 +105,7 @@ class DetailsViewModel @Inject internal constructor(
                 }
 
                 is GetActivityResult.Success -> _screenState.update {
-                    Success(result.todo.toInfoUi())
+                    Success(result.todo.toInfoForm(readOnly = true))
                 }
 
                 GetActivityResult.NotFound -> {
@@ -119,12 +120,13 @@ class DetailsViewModel @Inject internal constructor(
 }
 
 @VisibleForTesting
-internal fun Todo.toInfoUi(): InfoUi {
-    return InfoUi(
+internal fun Todo.toInfoForm(readOnly: Boolean): InfoForm {
+    return InfoForm(
         id = id,
         description = description,
         name = title,
         status = status,
-        image = null
+        image = null,
+        readOnly = readOnly
     )
 }
