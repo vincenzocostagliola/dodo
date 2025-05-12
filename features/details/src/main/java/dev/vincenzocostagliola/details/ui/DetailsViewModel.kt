@@ -41,6 +41,10 @@ class DetailsViewModel @Inject internal constructor(
     internal val screenState: StateFlow<ScreenState>
         get() = _screenState
 
+    init {
+
+    }
+
     fun sendEvent(event: ScreenEvents) {
         Timber.d("DetailsScreen - screenEvents: $event")
         viewModelScope.launch() {

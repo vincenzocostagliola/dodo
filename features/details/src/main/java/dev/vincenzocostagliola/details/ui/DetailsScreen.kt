@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -27,8 +28,11 @@ fun DetailsScreen(viewModel: DetailsViewModel, idToShow: Int?, navigateBack: () 
     val state: State<ScreenState> = viewModel.screenState.collectAsState()
     val viewState = state.value
     Timber.d("DetailsScreen - ViewState: $viewState")
-    viewModel.sendEvent(GetTodo(idToShow))
     ManageState(viewState, viewModel, navigateBack)
+
+    LaunchedEffect(idToShow) {
+        viewModel.sendEvent(GetTodo(idToShow))
+    }
 }
 
 @Composable
@@ -75,7 +79,7 @@ private fun ShowTodo(info: InfoUi, onBackPressed: () -> Unit) {
         topBar = {
             TopBar(
                 title = info.name,
-                onBackButton = { onBackPressed }
+                onBackButton =  onBackPressed
             )
         },
         content = { innerPadding ->
