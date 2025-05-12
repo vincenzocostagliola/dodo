@@ -26,7 +26,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.vincenzocostagliola.designsystem.R
 
 @Composable
 fun FormField(
@@ -34,8 +41,8 @@ fun FormField(
     keyboardOptions: KeyboardOptions,
     label: String,
     imageVector: ImageVector?,
-    textToShow : String,
-    readOnly : Boolean
+    textToShow: String,
+    readOnly: Boolean
 ) {
     var text by remember { mutableStateOf(textToShow) }
     Row(
@@ -58,13 +65,15 @@ fun FormField(
             value = text,
             onValueChange = { text = it },
             trailingIcon = {
-                AnimatedVisibility(
-                    visible = text.isNotBlank(),
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    IconButton(onClick = { text = "" }) {
-                        Icon(Icons.Outlined.Cancel, "Clear")
+                if (!readOnly) {
+                    AnimatedVisibility(
+                        visible = text.isNotBlank(),
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        IconButton(onClick = { text = "" }) {
+                            Icon(Icons.Outlined.Cancel, "Clear")
+                        }
                     }
                 }
             },
@@ -76,4 +85,42 @@ fun FormField(
             readOnly = readOnly
         )
     }
+}
+
+@Preview
+@Composable
+fun ShowFormFieldReadOnly(){
+    val focusManager = LocalFocusManager.current
+
+    FormField(
+        focusManager = focusManager,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next,
+            capitalization = KeyboardCapitalization.Words
+        ),
+        label = stringResource(R.string.title),
+        imageVector = null,
+        readOnly = true,
+        textToShow = "info.name"
+    )
+}
+
+@Preview
+@Composable
+fun ShowFormFieldNotReadOnly(){
+    val focusManager = LocalFocusManager.current
+
+    FormField(
+        focusManager = focusManager,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next,
+            capitalization = KeyboardCapitalization.Words
+        ),
+        label = stringResource(R.string.title),
+        imageVector = null,
+        readOnly = false,
+        textToShow = "info.name"
+    )
 }
