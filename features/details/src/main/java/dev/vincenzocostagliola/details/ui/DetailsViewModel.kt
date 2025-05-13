@@ -92,14 +92,9 @@ class DetailsViewModel @Inject internal constructor(
         }
     }
 
-    private fun manageModifyOrSave(modify: Boolean, todo: InfoForm) {
+    private fun manageModifyOrSave(readOnly: Boolean, todo: InfoForm) {
         _screenState.update {
-            val infoToModify = if (modify) {
-                todo.copy(readOnly = false)
-            } else {
-                todo.copy(readOnly = true)
-            }
-
+            val infoToModify = todo.copy(readOnly = readOnly)
             Success(infoToModify)
         }
     }
