@@ -94,7 +94,8 @@ fun Form(
                 label = stringResource(R.string.title),
                 imageVector = null,
                 info = info.list[item],
-                onValueChange = { onValueChange(it) }
+                onValueChange = { onValueChange(it) },
+                readOnly = info.readOnly
             )
         }
     }

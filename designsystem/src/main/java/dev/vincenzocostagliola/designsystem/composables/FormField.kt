@@ -40,7 +40,8 @@ fun FormField(
     imageVector: ImageVector?,
     label: String,
     info: FieldForm,
-    onValueChange: (FieldForm) -> Unit
+    onValueChange: (FieldForm) -> Unit,
+    readOnly : Boolean
 ) {
     var field by remember { mutableStateOf(info) }
     Row(
@@ -67,7 +68,7 @@ fun FormField(
                 onValueChange(toReturn)
             },
             trailingIcon = {
-                if (!info.readOnly) {
+                if (!readOnly) {
                     AnimatedVisibility(
                         visible = field.text.isNotBlank(),
                         enter = fadeIn(),
@@ -87,7 +88,7 @@ fun FormField(
                 focusManager.clearFocus()
             },
             singleLine = field.singleLine,
-            readOnly = field.readOnly,
+            readOnly = readOnly,
             isError = field.isError
         )
     }
