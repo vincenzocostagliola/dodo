@@ -12,10 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.data.error.ErrorResources
 import dev.vincenzocostagliola.designsystem.composables.ErrorDialog
+import dev.vincenzocostagliola.designsystem.composables.FieldForm
 import dev.vincenzocostagliola.designsystem.composables.Form
 import dev.vincenzocostagliola.designsystem.composables.InfoForm
 import dev.vincenzocostagliola.designsystem.composables.Progress
@@ -73,7 +78,8 @@ private fun ManageState(
                             viewState.todo
                         )
                     )
-                }
+                },
+                onValueChange = { viewModel.sendEvent(ScreenEvents.OnValueChanged(it)) }
             )
         }
     }
@@ -94,6 +100,7 @@ private fun ShowTodo(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
     modifyOrSave: (Boolean) -> Unit,
+    onValueChange: (FieldForm) -> Unit
 ) {
 
     Scaffold(
@@ -107,7 +114,7 @@ private fun ShowTodo(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { modifyOrSave(!info.readOnly) },
+                onClick = { modifyOrSave(info.readOnly.not()) },
                 containerColor = Purple40,
                 contentColor = ExtraLight
             ) {
@@ -122,7 +129,7 @@ private fun ShowTodo(
         Form(
             info = info,
             modifier = Modifier.padding(it),
-            onValueChange = { }
+            onValueChange = { onValueChange(it) }
         )
     }
 }

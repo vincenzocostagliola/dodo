@@ -30,6 +30,7 @@ sealed class ScreenEvents {
     data class GetTodo(val id: Int?) : ScreenEvents()
     data class ModifyOrSave(val modify: Boolean, val todo: InfoForm) : ScreenEvents()
     data class PerformDialogAction(val dialogAction: DialogAction) : ScreenEvents()
+    data class OnValueChanged(val info: FieldForm) : ScreenEvents()
 
 }
 
@@ -43,6 +44,20 @@ class DetailsViewModel @Inject internal constructor(
     internal val screenState: StateFlow<ScreenState>
         get() = _screenState
 
+    private val infoFormState = MutableStateFlow(InfoForm.getEmptyInfoForm())
+
+    init {
+        observeInfoFormUpdates()
+    }
+
+    private fun observeInfoFormUpdates() {
+        viewModelScope.launch {
+            infoFormState.collect { updatedInfo ->
+                Timber.d("DetailsScreen - infoFormState: $updatedInfo")
+            }
+        }
+    }
+
     fun sendEvent(event: ScreenEvents) {
         Timber.d("DetailsScreen - screenEvents: $event")
         viewModelScope.launch() {
@@ -50,6 +65,7 @@ class DetailsViewModel @Inject internal constructor(
                 is ScreenEvents.GetTodo -> retrieveToDo(event.id)
                 is ScreenEvents.PerformDialogAction -> performDialogAction(event.dialogAction)
                 is ScreenEvents.ModifyOrSave -> manageModifyOrSave(event.modify, event.todo)
+                is ScreenEvents.OnValueChanged -> onValueChanged(event.info)
             }
         }
     }
@@ -89,6 +105,23 @@ class DetailsViewModel @Inject internal constructor(
         }
     }
 
+
+    private fun onValueChanged(info: FieldForm) {
+        infoFormState.update {
+            it.copy(list = updateFieldForm(it, info))
+        }
+    }
+
+    private fun updateFieldForm(
+        form: InfoForm,
+        info: FieldForm
+    ): MutableList<FieldForm> {
+        return form.list
+            .filterNot { it::class == info::class }
+            .toMutableList()
+            .apply { add(info) }
+    }
+
     private fun manageModifyOrSave(readOnly: Boolean, todo: InfoForm) {
         _screenState.update {
             val infoToModify = todo.copy(readOnly = readOnly)
@@ -110,7 +143,8 @@ class DetailsViewModel @Inject internal constructor(
                 }
 
                 is GetActivityResult.Success -> _screenState.update {
-                    Success(result.todo.toInfoForm(readOnly = true))
+                    infoFormState.update { result.todo.toInfoForm(readOnly = true) }
+                    Success(infoFormState.value)
                 }
 
                 GetActivityResult.NotFound -> {
@@ -125,7 +159,7 @@ class DetailsViewModel @Inject internal constructor(
 
 
     @VisibleForTesting
-    private  fun Todo.toInfoForm(readOnly: Boolean): InfoForm {
+    private fun Todo.toInfoForm(readOnly: Boolean): InfoForm {
         return InfoForm(
             id = id,
             readOnly = readOnly,
@@ -149,7 +183,7 @@ class DetailsViewModel @Inject internal constructor(
         )
     }
 
-    private fun checkIfIsInError(text: String) : Boolean{
+    private fun checkIfIsInError(text: String): Boolean {
         return text.isNotBlank() && text.isEmpty()
     }
 }

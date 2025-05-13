@@ -1,6 +1,7 @@
 package dev.vincenzocostagliola.designsystem.composables
 
 
+import android.icu.text.IDNA
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.widthIn
@@ -21,13 +22,38 @@ data class InfoForm(
     val id: Int,
     val readOnly: Boolean,
     val list: List<FieldForm>
-)
+) {
+    companion object {
+        fun getEmptyInfoForm(): InfoForm {
+            return InfoForm(
+                id = -1,
+                readOnly = true,
+                list = mutableListOf(
+                    FieldForm.Title(
+                        text = "",
+                        singleLine = false,
+                        isError = false
+                    ),
+                    FieldForm.Description(
+                        text = "",
+                        singleLine = false,
+                        isError = false
+                    ),
+                    FieldForm.Status(
+                        text = "",
+                        singleLine = false,
+                        isError = false
+                    )
+                )
+            )
+        }
+    }
+}
 
 sealed class FieldForm {
     abstract val text: String
     abstract val singleLine: Boolean
     abstract val isError: Boolean
-
 
     data class Title(
         override val text: String,
@@ -49,8 +75,8 @@ sealed class FieldForm {
 
 
     @Composable
-    fun getLabelFromType() : String{
-        return when(this){
+    fun getLabelFromType(): String {
+        return when (this) {
             is Description -> stringResource(R.string.description)
             is Status -> stringResource(R.string.status)
             is Title -> stringResource(R.string.title)
