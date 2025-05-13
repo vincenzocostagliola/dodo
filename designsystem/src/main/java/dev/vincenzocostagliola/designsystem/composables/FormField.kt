@@ -56,7 +56,7 @@ fun FormField(
         if (imageVector != null) {
             Icon(imageVector, null)
         } else {
-            Box(Modifier.size(24.dp))
+            //Box(Modifier.size(24.dp))
         }
 
         OutlinedTextField(

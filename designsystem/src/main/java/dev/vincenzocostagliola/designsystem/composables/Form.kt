@@ -43,10 +43,10 @@ data class InfoForm(
 )
 
 @Composable
-fun Form(info: InfoForm) {
+fun Form(info: InfoForm, modifier: Modifier = Modifier) {
     val focusManager = LocalFocusManager.current
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .widthIn(max = 480.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 24.dp)
@@ -164,7 +164,8 @@ fun Form(info: InfoForm) {
 @Composable
 fun PreviewForm() {
     Form(
-        info = getFakeInfo()
+        info = getFakeInfo(),
+        modifier = Modifier
     )
 }
 private fun getFakeInfo(): InfoForm = InfoForm(
