@@ -66,7 +66,14 @@ private fun ManageState(
             ShowTodo(
                 info = viewState.todo,
                 onBackPressed = onBackPressed,
-                modifyOrSave = { viewModel.sendEvent(ScreenEvents.ModifyOrSave(it, viewState.todo)) }
+                modifyOrSave = {
+                    viewModel.sendEvent(
+                        ScreenEvents.ModifyOrSave(
+                            it,
+                            viewState.todo
+                        )
+                    )
+                }
             )
         }
     }
@@ -87,14 +94,14 @@ private fun ShowTodo(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
     modifyOrSave: (Boolean) -> Unit,
+) {
 
-    ) {
     Scaffold(
         modifier = modifier
             .background(ExtraLight),
         topBar = {
             TopBar(
-                title = info.name,
+                title = "",
                 onBackButton = onBackPressed
             )
         },
@@ -112,6 +119,10 @@ private fun ShowTodo(
             }
         },
     ) {
-        Form(info, modifier = Modifier.padding(it))
+        Form(
+            info = info,
+            modifier = Modifier.padding(it),
+            onValueChange = { }
+        )
     }
 }

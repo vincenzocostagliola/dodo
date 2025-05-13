@@ -4,11 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -39,12 +37,12 @@ import dev.vincenzocostagliola.designsystem.R
 fun FormField(
     focusManager: FocusManager,
     keyboardOptions: KeyboardOptions,
-    label: String,
     imageVector: ImageVector?,
-    textToShow: String,
-    readOnly: Boolean
+    label: String,
+    info: FieldForm,
+    onValueChange: (FieldForm) -> Unit
 ) {
-    var text by remember { mutableStateOf(textToShow) }
+    var field by remember { mutableStateOf(info) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,16 +60,23 @@ fun FormField(
         OutlinedTextField(
             modifier = Modifier.weight(1f),
             label = { Text(label) },
-            value = text,
-            onValueChange = { text = it },
+            value = field.text,
+            onValueChange = {
+                val toReturn = field.updateFieldFormWithNewText(it)
+                field = toReturn
+                onValueChange(toReturn)
+            },
             trailingIcon = {
-                if (!readOnly) {
+                if (!info.readOnly) {
                     AnimatedVisibility(
-                        visible = text.isNotBlank(),
+                        visible = field.text.isNotBlank(),
                         enter = fadeIn(),
                         exit = fadeOut()
                     ) {
-                        IconButton(onClick = { text = "" }) {
+                        IconButton(onClick = {
+                            val toReturn = field.updateFieldFormWithNewText("")
+                            field = toReturn
+                        }) {
                             Icon(Icons.Outlined.Cancel, "Clear")
                         }
                     }
@@ -81,15 +86,16 @@ fun FormField(
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            singleLine = false,
-            readOnly = readOnly
+            singleLine = field.singleLine,
+            readOnly = field.readOnly,
+            isError = field.isError
         )
     }
 }
 
 @Preview
 @Composable
-fun ShowFormFieldReadOnly(){
+fun ShowFormFieldReadOnly() {
     val focusManager = LocalFocusManager.current
 
     FormField(
@@ -101,14 +107,19 @@ fun ShowFormFieldReadOnly(){
         ),
         label = stringResource(R.string.title),
         imageVector = null,
-        readOnly = true,
-        textToShow = "info.name"
+        info = FieldForm.Title(
+            text = "title",
+            singleLine = false,
+            readOnly = true,
+            isError = false,
+        ),
+        onValueChange = { }
     )
 }
 
 @Preview
 @Composable
-fun ShowFormFieldNotReadOnly(){
+fun ShowFormFieldNotReadOnly() {
     val focusManager = LocalFocusManager.current
 
     FormField(
@@ -120,7 +131,12 @@ fun ShowFormFieldNotReadOnly(){
         ),
         label = stringResource(R.string.title),
         imageVector = null,
-        readOnly = false,
-        textToShow = "info.name"
+        info = FieldForm.Title(
+            text = "title",
+            singleLine = false,
+            readOnly = false,
+            isError = false,
+        ),
+        onValueChange = {}
     )
 }
