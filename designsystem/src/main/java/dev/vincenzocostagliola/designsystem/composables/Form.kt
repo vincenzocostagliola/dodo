@@ -47,6 +47,16 @@ sealed class FieldForm {
         override val isError: Boolean
     ) : FieldForm()
 
+
+    @Composable
+    fun getLabelFromType() : String{
+        return when(this){
+            is Description -> stringResource(R.string.description)
+            is Status -> stringResource(R.string.status)
+            is Title -> stringResource(R.string.title)
+        }
+    }
+
     fun updateFieldFormWithNewText(text: String): FieldForm {
         return when (this) {
             is Description -> Description(
@@ -91,7 +101,7 @@ fun Form(
                     imeAction = ImeAction.Next,
                     capitalization = KeyboardCapitalization.Words
                 ),
-                label = stringResource(R.string.title),
+                label = info.list[item].getLabelFromType(),
                 imageVector = null,
                 info = info.list[item],
                 onValueChange = { onValueChange(it) },

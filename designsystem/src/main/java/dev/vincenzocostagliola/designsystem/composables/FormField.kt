@@ -111,10 +111,10 @@ fun ShowFormFieldReadOnly() {
         info = FieldForm.Title(
             text = "title",
             singleLine = false,
-            readOnly = true,
             isError = false,
         ),
-        onValueChange = { }
+        onValueChange = { },
+        readOnly = true
     )
 }
 
@@ -135,9 +135,9 @@ fun ShowFormFieldNotReadOnly() {
         info = FieldForm.Title(
             text = "title",
             singleLine = false,
-            readOnly = false,
             isError = false,
         ),
-        onValueChange = {}
+        onValueChange = {},
+        readOnly = false
     )
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.vincenzocostagliola.data.error.AppError
 import dev.vincenzocostagliola.data.error.DialogAction
+import dev.vincenzocostagliola.designsystem.composables.FieldForm
 import dev.vincenzocostagliola.designsystem.composables.InfoForm
 import dev.vincenzocostagliola.details.data.domain.Todo
 import dev.vincenzocostagliola.details.data.domain.result.GetActivityResult
@@ -41,10 +42,6 @@ class DetailsViewModel @Inject internal constructor(
         MutableStateFlow(Loading)
     internal val screenState: StateFlow<ScreenState>
         get() = _screenState
-
-    init {
-
-    }
 
     fun sendEvent(event: ScreenEvents) {
         Timber.d("DetailsScreen - screenEvents: $event")
@@ -125,16 +122,34 @@ class DetailsViewModel @Inject internal constructor(
             }
         }
     }
-}
 
-@VisibleForTesting
-internal fun Todo.toInfoForm(readOnly: Boolean): InfoForm {
-    return InfoForm(
-        id = id,
-        description = description,
-        name = title,
-        status = status,
-        image = null,
-        readOnly = readOnly
-    )
+
+    @VisibleForTesting
+    private  fun Todo.toInfoForm(readOnly: Boolean): InfoForm {
+        return InfoForm(
+            id = id,
+            readOnly = readOnly,
+            list = listOf(
+                FieldForm.Title(
+                    text = title,
+                    singleLine = false,
+                    isError = checkIfIsInError(title)
+                ),
+                FieldForm.Description(
+                    text = description,
+                    singleLine = false,
+                    isError = checkIfIsInError(description)
+                ),
+                FieldForm.Status(
+                    text = status,
+                    singleLine = false,
+                    isError = checkIfIsInError(status)
+                )
+            )
+        )
+    }
+
+    private fun checkIfIsInError(text: String) : Boolean{
+        return text.isNotBlank() && text.isEmpty()
+    }
 }
