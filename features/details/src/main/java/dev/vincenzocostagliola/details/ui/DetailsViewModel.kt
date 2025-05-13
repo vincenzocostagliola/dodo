@@ -28,7 +28,7 @@ internal sealed class ScreenState {
 
 sealed class ScreenEvents {
     data class GetTodo(val id: Int?) : ScreenEvents()
-    data class ModifyOrSave(val modify: Boolean, val todo: InfoForm) : ScreenEvents()
+    data class ModifyOrSave(val modify: Boolean) : ScreenEvents()
     data class PerformDialogAction(val dialogAction: DialogAction) : ScreenEvents()
     data class OnValueChanged(val info: FieldForm) : ScreenEvents()
 
@@ -64,7 +64,7 @@ class DetailsViewModel @Inject internal constructor(
             when (event) {
                 is ScreenEvents.GetTodo -> retrieveToDo(event.id)
                 is ScreenEvents.PerformDialogAction -> performDialogAction(event.dialogAction)
-                is ScreenEvents.ModifyOrSave -> manageModifyOrSave(event.modify, event.todo)
+                is ScreenEvents.ModifyOrSave -> manageModifyOrSave(event.modify)
                 is ScreenEvents.OnValueChanged -> onValueChanged(event.info)
             }
         }
@@ -122,10 +122,23 @@ class DetailsViewModel @Inject internal constructor(
             .apply { add(info) }
     }
 
-    private fun manageModifyOrSave(readOnly: Boolean, todo: InfoForm) {
+    private fun manageModifyOrSave(readOnly: Boolean) {
+        saveTodo(readOnly)
+
         _screenState.update {
-            val infoToModify = todo.copy(readOnly = readOnly)
-            Success(infoToModify)
+            infoFormState.update {
+                it.copy(readOnly = readOnly)
+            }
+            Success(infoFormState.value)
+        }
+    }
+
+    private fun saveTodo(readOnly: Boolean) {
+        if (readOnly) {
+            Timber.d("DetailsScreen - DetailsViewModel -  manageModifyOrSave: $readOnly")
+            viewModelScope.launch(Dispatchers.IO) {
+                useCase.saveTodo(infoFormState.value.toTodo())
+            }
         }
     }
 
@@ -179,7 +192,17 @@ class DetailsViewModel @Inject internal constructor(
                     singleLine = false,
                     isError = checkIfIsInError(status)
                 )
-            )
+            ), addedDate = addedDate
+        )
+    }
+
+    private fun InfoForm.toTodo(): Todo {
+        return Todo(
+            id = id,
+            title = list.first { it::class == FieldForm.Title::class }.text,
+            description = list.first { it::class == FieldForm.Description::class }.text,
+            status = list.first { it::class == FieldForm.Status::class }.text,
+            addedDate = addedDate
         )
     }
 

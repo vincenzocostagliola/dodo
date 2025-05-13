@@ -73,10 +73,7 @@ private fun ManageState(
                 onBackPressed = onBackPressed,
                 modifyOrSave = {
                     viewModel.sendEvent(
-                        ScreenEvents.ModifyOrSave(
-                            it,
-                            viewState.todo
-                        )
+                        ScreenEvents.ModifyOrSave(it)
                     )
                 },
                 onValueChange = { viewModel.sendEvent(ScreenEvents.OnValueChanged(it)) }

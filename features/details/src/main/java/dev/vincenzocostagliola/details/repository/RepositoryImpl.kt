@@ -11,6 +11,7 @@ import timber.log.Timber
 
 internal interface Repository {
     fun getTodo(id: Int): Flow<GetActivityResultDto>
+    suspend fun saveTodo(todoDto: TodoDto)
 }
 
 internal class RepositoryImpl(
@@ -22,7 +23,7 @@ internal class RepositoryImpl(
         return channelFlow {
             try {
                 val todo: TodoDto? = db.activitiesDao().getTodo(id)?.toDto()
-                Timber.d("DetailsScreen - Repository -  getAllActivities - db: $todo")
+                Timber.d("DetailsScreen - Repository -  getTodo - db: $todo")
 
                 if (todo != null) {
                     send(GetActivityResultDto.Success(todo))
@@ -31,12 +32,19 @@ internal class RepositoryImpl(
                 }
 
             } catch (e: Throwable) {
-                Timber.d("DetailsScreen - Repository -  getAllActivities - failure: $e")
+                Timber.d("DetailsScreen - Repository -  getTodo - failure: $e")
                 val result = GetActivityResultDto.Failure(e)
                 send(result)
             }
         }
     }
+
+    override suspend fun saveTodo(todoDto: TodoDto) {
+        Timber.d("DetailsScreen - Repository -  saveTodo - db: $todoDto")
+        db.activitiesDao().insertTodo(todoDto.toTodoDb())
+    }
+
+
 
     private fun TodoDb.toDto(): TodoDto {
         return TodoDto(

@@ -17,7 +17,8 @@ internal data class TodoDto(
             id = id,
             title = title,
             description = description,
-            status = status
+            status = status,
+            addedDate = addedDate
         )
     }
 
@@ -26,7 +27,8 @@ internal data class TodoDto(
             title = title,
             description = description,
             addedDate = addedDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
-            status = status
+            status = status,
+            id = id
         )
     }
 }

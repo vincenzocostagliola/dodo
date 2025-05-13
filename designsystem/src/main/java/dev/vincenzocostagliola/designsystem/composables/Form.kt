@@ -17,10 +17,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.vincenzocostagliola.designsystem.R
+import org.threeten.bp.OffsetDateTime
 
 data class InfoForm(
     val id: Int,
     val readOnly: Boolean,
+    val addedDate: OffsetDateTime,
     val list: List<FieldForm>
 ) {
     companion object {
@@ -44,7 +46,7 @@ data class InfoForm(
                         singleLine = false,
                         isError = false
                     )
-                )
+                ), addedDate = OffsetDateTime.now()
             )
         }
     }
@@ -167,5 +169,5 @@ private fun getFakeInfo(): InfoForm = InfoForm(
             singleLine = false,
             isError = false,
         )
-    )
+    ), addedDate = OffsetDateTime.now()
 )
