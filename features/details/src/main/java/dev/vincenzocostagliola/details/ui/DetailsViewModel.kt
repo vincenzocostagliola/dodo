@@ -7,7 +7,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.vincenzocostagliola.data.error.AppError
 import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.designsystem.composables.InfoForm
-import dev.vincenzocostagliola.designsystem.composables.InfoUi
 import dev.vincenzocostagliola.details.data.domain.Todo
 import dev.vincenzocostagliola.details.data.domain.result.GetActivityResult
 import dev.vincenzocostagliola.details.ui.ScreenState.*
@@ -28,6 +27,7 @@ internal sealed class ScreenState {
 
 sealed class ScreenEvents {
     data class GetTodo(val id: Int?) : ScreenEvents()
+    data class ModifyOrSave(val modify: Boolean, val todo: InfoForm) : ScreenEvents()
     data class PerformDialogAction(val dialogAction: DialogAction) : ScreenEvents()
 
 }
@@ -52,6 +52,7 @@ class DetailsViewModel @Inject internal constructor(
             when (event) {
                 is ScreenEvents.GetTodo -> retrieveToDo(event.id)
                 is ScreenEvents.PerformDialogAction -> performDialogAction(event.dialogAction)
+                is ScreenEvents.ModifyOrSave -> manageModifyOrSave(event.modify, event.todo)
             }
         }
     }
@@ -88,6 +89,18 @@ class DetailsViewModel @Inject internal constructor(
             _screenState.update {
                 Error(AppError.GenericError)
             }
+        }
+    }
+
+    private fun manageModifyOrSave(modify: Boolean, todo: InfoForm) {
+        _screenState.update {
+            val infoToModify = if (modify) {
+                todo.copy(readOnly = false)
+            } else {
+                todo.copy(readOnly = true)
+            }
+
+            Success(infoToModify)
         }
     }
 
