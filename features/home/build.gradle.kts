@@ -54,7 +54,8 @@ dependencies {
 
 
     /**DATE TIME*/
-    implementation(libs.threeTen)
+    implementation(libs.threeTenJW)
+    testImplementation(libs.threeTen)
     /**NETWORK*/
     implementation(libs.bundles.network)
     /**MODULES*/

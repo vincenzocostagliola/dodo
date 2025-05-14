@@ -20,6 +20,7 @@ composeBom = "2025.04.01"
 
 timber = "5.0.1"
 threeTen = "1.6.1"
+threeTenJW = "1.4.9"
 coil = "2.7.0"
 
 #Network
@@ -80,6 +81,7 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 
 #DATE TIME
 threeTen = { module = "org.threeten:threetenbp", version.ref = "threeTen" }
+threeTenJW  = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threeTenJW" }
 
 #Network
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

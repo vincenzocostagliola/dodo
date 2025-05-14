@@ -1,6 +1,7 @@
 package dev.vincenzocostagliola.details.ui
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.threeten.bp.OffsetDateTime
 import timber.log.Timber
 import javax.inject.Inject
 
