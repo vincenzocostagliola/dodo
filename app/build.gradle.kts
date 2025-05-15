@@ -76,5 +76,6 @@ dependencies {
     implementation(project(":designsystem"))
     implementation(project(":features:home"))
     implementation(project(":features:details"))
+    implementation(project(":features:settings"))
     implementation(project(":data"))
 }

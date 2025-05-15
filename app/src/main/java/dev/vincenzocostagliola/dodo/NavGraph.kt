@@ -6,19 +6,22 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import dev.vincenzocostagliola.dodo.NavigationRoute
 import dev.vincenzocostagliola.home.ui.HomeScreen
 import dev.vincenzocostagliola.home.ui.HomeViewModel
 import timber.log.Timber
 import androidx.navigation.navArgument
 import dev.vincenzocostagliola.details.ui.DetailsViewModel
 import dev.vincenzocostagliola.details.ui.DetailsScreen
+import dev.vincenzocostagliola.settings.SettingsScreen
+import dev.vincenzocostagliola.settings.ui.SettingsScreenViewModel
 
 
 @Composable
 internal fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = NavigationRoute.Home.route) {
         composable(NavigationRoute.Home.route) {
+            Timber.d("Navigation - navigate to $route")
+
             val viewModel = hiltViewModel<HomeViewModel>()
             val navigateToDetail: (Int?) -> Unit = {
                 val route = if (it != null) {
@@ -39,6 +42,8 @@ internal fun NavGraph(navController: NavHostController) {
                 defaultValue = null
             })
         ) { backStackEntry ->
+            Timber.d("Navigation - navigate to $route")
+
             val id: Int? =
                 backStackEntry.arguments?.getString(
                     NavigationRoute.DetailsScreen.argumentId
@@ -54,24 +59,17 @@ internal fun NavGraph(navController: NavHostController) {
             )
         }
 
-        /*
+
                 composable(
-                    route = NavigationRoute.DescriptionScreen.route,
-                    arguments = listOf(navArgument(NavigationRoute.DescriptionScreen.argumentId) {
-                        type = NavType.StringType
-                    })
+                    route = NavigationRoute.SettingsScreen.route,
                 ) { backStackEntry ->
-                    val description =
-                        backStackEntry.arguments?.getString(NavigationRoute.DescriptionScreen.argumentId)?.let {
-                            URLDecoder.decode(it, StandardCharsets.UTF_8.toString())
-                        } ?: ""
-                    Timber.d("Navigation - received Description = $description")
-
+                    Timber.d("Navigation - navigate to $route")
+                    val viewModel = hiltViewModel<SettingsScreenViewModel>()
                     val onBackPressed: () -> Unit = { navController.popBackStack() }
-                    DescriptionScreen(description, onBackPressed)
+                    SettingsScreen(
+                        viewModel = viewModel,
+                        onBackPressed = onBackPressed
+                    )
                 }
-
-         */
-
     }
 }
