@@ -1,7 +1,6 @@
 package dev.vincenzocostagliola.details.ui
 
 import androidx.annotation.VisibleForTesting
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,16 +8,17 @@ import dev.vincenzocostagliola.data.error.AppError
 import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.designsystem.composables.FieldForm
 import dev.vincenzocostagliola.designsystem.composables.InfoForm
-import dev.vincenzocostagliola.details.data.domain.Todo
+import dev.vincenzocostagliola.details.data.domain.Todo.Companion.toTodo
 import dev.vincenzocostagliola.details.data.domain.result.GetActivityResult
-import dev.vincenzocostagliola.details.ui.ScreenState.*
+import dev.vincenzocostagliola.details.ui.ScreenState.Error
+import dev.vincenzocostagliola.details.ui.ScreenState.Loading
+import dev.vincenzocostagliola.details.ui.ScreenState.Success
 import dev.vincenzocostagliola.details.usecase.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.threeten.bp.OffsetDateTime
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -172,43 +172,4 @@ class DetailsViewModel @Inject internal constructor(
         }
     }
 
-
-    @VisibleForTesting
-    private fun Todo.toInfoForm(readOnly: Boolean): InfoForm {
-        return InfoForm(
-            id = id,
-            readOnly = readOnly,
-            list = listOf(
-                FieldForm.Title(
-                    text = title,
-                    singleLine = false,
-                    isError = checkIfIsInError(title)
-                ),
-                FieldForm.Description(
-                    text = description,
-                    singleLine = false,
-                    isError = checkIfIsInError(description)
-                ),
-                FieldForm.Status(
-                    text = status,
-                    singleLine = false,
-                    isError = checkIfIsInError(status)
-                )
-            ), addedDate = addedDate
-        )
-    }
-
-    private fun InfoForm.toTodo(): Todo {
-        return Todo(
-            id = id,
-            title = list.first { it::class == FieldForm.Title::class }.text,
-            description = list.first { it::class == FieldForm.Description::class }.text,
-            status = list.first { it::class == FieldForm.Status::class }.text,
-            addedDate = addedDate
-        )
-    }
-
-    private fun checkIfIsInError(text: String): Boolean {
-        return text.isNotBlank() && text.isEmpty()
-    }
 }
