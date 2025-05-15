@@ -125,22 +125,33 @@ class DetailsViewModel @Inject internal constructor(
     }
 
     private fun manageModifyOrSave(readOnly: Boolean) {
-        saveTodo(readOnly)
-
-        _screenState.update {
-            infoFormState.update {
-                it.copy(readOnly = readOnly)
-            }
-            Success(infoFormState.value)
+        Timber.d("DetailsScreen - DetailsViewModel -  manageModifyOrSave: $readOnly")
+        /*means save todo*/
+        if (readOnly && noErrorsPresent(
+                form = infoFormState.value,
+                readOnly = readOnly
+            )
+        ) {
+            saveTodo()
+        } else {
+            infoFormState.update { it.copy(readOnly = readOnly) }
         }
+
+        _screenState.update { Success(infoFormState.value) }
     }
 
-    private fun saveTodo(readOnly: Boolean) {
-        if (readOnly) {
-            Timber.d("DetailsScreen - DetailsViewModel -  manageModifyOrSave: $readOnly")
-            viewModelScope.launch(Dispatchers.IO) {
-                useCase.saveTodo(infoFormState.value.toTodo())
-            }
+    private fun noErrorsPresent(form: InfoForm, readOnly: Boolean): Boolean {
+        val updated = form.toTodo().toInfoForm(readOnly = readOnly)
+        infoFormState.update { updated }
+        val noError = updated.list.all { !(it.isError) }
+        Timber.d("DetailsScreen - DetailsViewModel -  noErrorsPresent: $noError")
+
+        return noError
+    }
+
+    private fun saveTodo() {
+        viewModelScope.launch(Dispatchers.IO) {
+            useCase.saveTodo(infoFormState.value.toTodo())
         }
     }
 

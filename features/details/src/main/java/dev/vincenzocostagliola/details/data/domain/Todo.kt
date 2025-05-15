@@ -25,28 +25,32 @@ internal data class Todo(
     fun toInfoForm(readOnly: Boolean): InfoForm {
         return InfoForm(
             id = id,
-            readOnly = readOnly,
+            readOnly = if (isInError(title)
+                || isInError(description)
+                || isInError(status)
+            ) !readOnly else readOnly,
             list = listOf(
                 FieldForm.Title(
                     text = title,
                     singleLine = false,
-                    isError = checkIfIsInError(title)
+                    isError = isInError(title)
                 ),
                 FieldForm.Description(
                     text = description,
                     singleLine = false,
-                    isError = checkIfIsInError(description)
+                    isError = isInError(description)
                 ),
                 FieldForm.Status(
                     text = status,
                     singleLine = false,
-                    isError = checkIfIsInError(status)
+                    isError = isInError(status)
                 )
-            ), addedDate = addedDate
+            ),
+            addedDate = addedDate
         )
     }
 
-    private fun checkIfIsInError(text: String): Boolean {
+    private fun isInError(text: String): Boolean {
         return text.isNotBlank() && text.isEmpty()
     }
 
