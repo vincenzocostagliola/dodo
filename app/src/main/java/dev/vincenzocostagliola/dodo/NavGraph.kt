@@ -20,7 +20,7 @@ import dev.vincenzocostagliola.settings.ui.SettingsScreenViewModel
 internal fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = NavigationRoute.Home.route) {
         composable(NavigationRoute.Home.route) {
-            Timber.d("Navigation - navigate to $route")
+            Timber.d("Navigation - navigate to ${NavigationRoute.Home.route}")
 
             val viewModel = hiltViewModel<HomeViewModel>()
             val navigateToDetail: (Int?) -> Unit = {
@@ -31,7 +31,14 @@ internal fun NavGraph(navController: NavHostController) {
                 }
                 navController.navigate(route)
             }
-            HomeScreen(viewModel, navigateToDetail)
+            val openSettings: () -> Unit =
+                { navController.navigate(NavigationRoute.SettingsScreen.createRoute()) }
+
+            HomeScreen(
+                viewModel = viewModel,
+                navigateToDetail = navigateToDetail,
+                openSettings = openSettings
+            )
         }
 
         composable(
@@ -42,7 +49,7 @@ internal fun NavGraph(navController: NavHostController) {
                 defaultValue = null
             })
         ) { backStackEntry ->
-            Timber.d("Navigation - navigate to $route")
+            Timber.d("Navigation - navigate to ${NavigationRoute.DetailsScreen.route}")
 
             val id: Int? =
                 backStackEntry.arguments?.getString(
@@ -60,16 +67,16 @@ internal fun NavGraph(navController: NavHostController) {
         }
 
 
-                composable(
-                    route = NavigationRoute.SettingsScreen.route,
-                ) { backStackEntry ->
-                    Timber.d("Navigation - navigate to $route")
-                    val viewModel = hiltViewModel<SettingsScreenViewModel>()
-                    val onBackPressed: () -> Unit = { navController.popBackStack() }
-                    SettingsScreen(
-                        viewModel = viewModel,
-                        onBackPressed = onBackPressed
-                    )
-                }
+        composable(
+            route = NavigationRoute.SettingsScreen.route,
+        ) { backStackEntry ->
+            Timber.d("Navigation - navigate to ${NavigationRoute.SettingsScreen.route}")
+            val viewModel = hiltViewModel<SettingsScreenViewModel>()
+            val onBackPressed: () -> Unit = { navController.popBackStack() }
+            SettingsScreen(
+                viewModel = viewModel,
+                onBackPressed = onBackPressed
+            )
+        }
     }
 }

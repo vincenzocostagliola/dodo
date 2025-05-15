@@ -1,6 +1,7 @@
 package dev.vincenzocostagliola.home.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -31,14 +33,18 @@ import dev.vincenzocostagliola.designsystem.values.Dimens
 import timber.log.Timber
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, navigateToDetail: (Int?) -> Unit) {
+fun HomeScreen(
+    viewModel: HomeViewModel,
+    navigateToDetail: (Int?) -> Unit,
+    openSettings: () -> Unit
+) {
     val state: State<HomeScreenState> = viewModel.homeScreenState.collectAsState()
     val viewState = state.value
     Timber.d("HomeScreen - ViewState: $viewState")
 
     ManageLifeCycleEvent(viewModel)
 
-    ManageState(viewState, viewModel, navigateToDetail)
+    ManageState(viewState, viewModel, navigateToDetail, openSettings)
 }
 
 @Composable
@@ -50,7 +56,8 @@ private fun ManageLifeCycleEvent(viewModel: HomeViewModel) {
 private fun ManageState(
     viewState: HomeScreenState,
     viewModel: HomeViewModel,
-    navigateToDetail: (Int?) -> Unit
+    navigateToDetail: (Int?) -> Unit,
+    openSettings: () -> Unit
 ) {
     when (viewState) {
         is HomeScreenState.Error -> {
@@ -73,6 +80,9 @@ private fun ManageState(
                 },
                 addToDo = {
                     navigateToDetail(null)
+                },
+                openSettings = {
+                    openSettings
                 }
             )
         }
@@ -89,19 +99,35 @@ private fun ShowError(newResources: ErrorResources, performAction: (DialogAction
 }
 
 @Composable
-private fun ShowList(list: List<InfoUi>, onClick: (Int) -> Unit, addToDo: () -> Unit) {
+private fun ShowList(
+    list: List<InfoUi>,
+    onClick: (Int) -> Unit,
+    addToDo: () -> Unit,
+    openSettings: () -> Unit
+) {
     Scaffold(
         modifier = Modifier
             .background(ExtraLight)
             .windowInsetsPadding(WindowInsets.systemBars)
             .fillMaxSize(),
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = addToDo,
-                containerColor = Purple40,
-                contentColor = ExtraLight
-            ) {
-                Icon(Icons.Filled.Add, "")
+            Column {
+                FloatingActionButton(
+                    onClick = openSettings,
+                    containerColor = Purple40,
+                    contentColor = ExtraLight,
+                    modifier = Modifier.padding(bottom = Dimens.XSmall)
+                ) {
+                    Icon(Icons.Filled.Settings, contentDescription = "Settings")
+                }
+
+                FloatingActionButton(
+                    onClick = addToDo,
+                    containerColor = Purple40,
+                    contentColor = ExtraLight
+                ) {
+                    Icon(Icons.Filled.Add, contentDescription = "Add")
+                }
             }
         },
         content = { innerPadding ->
