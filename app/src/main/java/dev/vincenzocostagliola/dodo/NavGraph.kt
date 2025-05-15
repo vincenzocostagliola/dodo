@@ -12,7 +12,7 @@ import timber.log.Timber
 import androidx.navigation.navArgument
 import dev.vincenzocostagliola.details.ui.DetailsViewModel
 import dev.vincenzocostagliola.details.ui.DetailsScreen
-import dev.vincenzocostagliola.settings.SettingsScreen
+import dev.vincenzocostagliola.settings.ui.SettingsScreen
 import dev.vincenzocostagliola.settings.ui.SettingsScreenViewModel
 
 
