@@ -8,6 +8,7 @@ import dev.vincenzocostagliola.data.error.AppError
 import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.designsystem.composables.FieldForm
 import dev.vincenzocostagliola.designsystem.composables.InfoForm
+import dev.vincenzocostagliola.designsystem.composables.InfoForm.Companion.getEmptyInfoForm
 import dev.vincenzocostagliola.details.data.domain.Todo.Companion.toTodo
 import dev.vincenzocostagliola.details.data.domain.result.GetActivityResult
 import dev.vincenzocostagliola.details.ui.ScreenState.Error
@@ -91,7 +92,7 @@ class DetailsViewModel @Inject internal constructor(
 
         savedId = id
 
-        Timber.d("DetailsScreen - DetailsViewModel -  retrieveToDo")
+        Timber.d("DetailsScreen - DetailsViewModel -  retrieveToDo - id: $id")
 
         showLoading()
 
@@ -100,11 +101,14 @@ class DetailsViewModel @Inject internal constructor(
                 Timber.d("DetailsScreen - DetailsViewModel -  retrieveToDo : $it")
                 executeCollect(it)
             }
-        } ?: {
-            _screenState.update {
-                Error(AppError.GenericError)
-            }
+        } ?: run {
+            addNewTodo()
         }
+    }
+
+    private fun addNewTodo() {
+        infoFormState.update { getEmptyInfoForm() }
+        _screenState.update { Success(infoFormState.value) }
     }
 
 

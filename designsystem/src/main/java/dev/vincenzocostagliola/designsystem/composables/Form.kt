@@ -31,7 +31,7 @@ data class InfoForm(
         fun getEmptyInfoForm(): InfoForm {
             return InfoForm(
                 id = -1,
-                readOnly = true,
+                readOnly = false,
                 list = mutableListOf(
                     FieldForm.Title(
                         text = "",
