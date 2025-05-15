@@ -24,4 +24,8 @@ dependencies {
     // For hilt Implementation
     implementation (libs.hilt)
     ksp(libs.hilt.compiler)
+
+    /**Data persistence**/
+    /**SERIALIZATION*/
+    implementation(libs.kotlin.serialization)
 }

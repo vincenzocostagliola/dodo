@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.vincenzocostagliola.home"
+    namespace = "dev.vincenzocostagliola.settings"
     testNamespace = "dev.vincenzocostagliola"
     compileSdk = 35
     defaultConfig {
