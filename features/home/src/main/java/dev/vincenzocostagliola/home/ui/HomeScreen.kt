@@ -14,12 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.data.error.ErrorResources
 import dev.vincenzocostagliola.designsystem.composables.ErrorDialog
 import dev.vincenzocostagliola.designsystem.composables.InfoUi
 import dev.vincenzocostagliola.designsystem.composables.Progress
 import dev.vincenzocostagliola.designsystem.composables.ShortInfoListItem
+import dev.vincenzocostagliola.designsystem.composables.observeLifecycle
 import dev.vincenzocostagliola.designsystem.theme.ExtraLight
 import dev.vincenzocostagliola.designsystem.theme.Purple40
 import dev.vincenzocostagliola.designsystem.values.Dimens
@@ -31,7 +33,14 @@ fun HomeScreen(viewModel: HomeViewModel, navigateToDetail: (Int) -> Unit) {
     val viewState = state.value
     Timber.d("HomeScreen - ViewState: $viewState")
 
+    ManageLifeCycleEvent(viewModel)
+
     ManageState(viewState, viewModel, navigateToDetail)
+}
+
+@Composable
+private fun ManageLifeCycleEvent(viewModel: HomeViewModel) {
+    viewModel.observeLifecycle(LocalLifecycleOwner.current.lifecycle)
 }
 
 @Composable
@@ -98,7 +107,7 @@ private fun ShowList(list: List<InfoUi>, onClick: (Int) -> Unit, refresh: () -> 
                     .consumeWindowInsets(innerPadding)
             ) {
                 items(list.size) { item ->
-                    ShortInfoListItem (
+                    ShortInfoListItem(
                         info = list[item],
                         onClick = onClick
                     )

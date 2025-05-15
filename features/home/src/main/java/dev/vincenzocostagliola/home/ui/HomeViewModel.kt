@@ -1,6 +1,8 @@
 package dev.vincenzocostagliola.home.ui
 
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,14 +37,15 @@ sealed class HomeScreenEvents {
 @HiltViewModel
 class HomeViewModel @Inject internal constructor(
     private val useCase: HomeUseCase
-) : ViewModel() {
+) : ViewModel(), DefaultLifecycleObserver {
 
     private val _homeScreenState: MutableStateFlow<HomeScreenState> =
         MutableStateFlow(HomeScreenState.Loading)
     internal val homeScreenState: StateFlow<HomeScreenState>
         get() = _homeScreenState
 
-    init {
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
         sendEvent(HomeScreenEvents.GetAllActivities)
     }
 
