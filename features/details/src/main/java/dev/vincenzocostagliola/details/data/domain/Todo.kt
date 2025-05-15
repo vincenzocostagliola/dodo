@@ -4,6 +4,7 @@ import dev.vincenzocostagliola.designsystem.composables.FieldForm
 import dev.vincenzocostagliola.designsystem.composables.InfoForm
 import dev.vincenzocostagliola.details.data.dto.TodoDto
 import org.threeten.bp.OffsetDateTime
+import timber.log.Timber
 
 internal data class Todo(
     val id: Int,
@@ -23,12 +24,11 @@ internal data class Todo(
     }
 
     fun toInfoForm(readOnly: Boolean): InfoForm {
-        return InfoForm(
+        val updated =  InfoForm(
             id = id,
-            readOnly = if (isInError(title)
-                || isInError(description)
-                || isInError(status)
-            ) !readOnly else readOnly,
+            readOnly = isInError(title).not()
+                && isInError(description).not()
+                && isInError(status).not(),
             list = listOf(
                 FieldForm.Title(
                     text = title,
@@ -48,10 +48,15 @@ internal data class Todo(
             ),
             addedDate = addedDate
         )
+
+        Timber.d("Todo - toInfoForm - updated : $updated")
+        return updated
     }
 
     private fun isInError(text: String): Boolean {
-        return text.isNotBlank() && text.isEmpty()
+        val inError = text.isBlank() || text.isEmpty()
+        Timber.d("Todo - isInError - : $inError - text: $text")
+        return inError
     }
 
     companion object {

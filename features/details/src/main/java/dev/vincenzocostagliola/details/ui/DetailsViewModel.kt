@@ -55,7 +55,7 @@ class DetailsViewModel @Inject internal constructor(
     private fun observeInfoFormUpdates() {
         viewModelScope.launch {
             infoFormState.collect { updatedInfo ->
-                Timber.d("DetailsScreen - infoFormState: $updatedInfo")
+                Timber.d("DetailsScreen - observeInfoFormUpdates - infoFormState: $updatedInfo")
             }
         }
     }
@@ -133,8 +133,6 @@ class DetailsViewModel @Inject internal constructor(
             )
         ) {
             saveTodo()
-        } else {
-            infoFormState.update { it.copy(readOnly = readOnly) }
         }
 
         _screenState.update { Success(infoFormState.value) }
