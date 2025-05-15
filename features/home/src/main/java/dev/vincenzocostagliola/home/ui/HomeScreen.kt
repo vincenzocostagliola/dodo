@@ -1,14 +1,15 @@
 package dev.vincenzocostagliola.home.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Aod
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -21,9 +22,9 @@ import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.data.error.ErrorResources
 import dev.vincenzocostagliola.designsystem.composables.ErrorDialog
 import dev.vincenzocostagliola.designsystem.composables.InfoUi
+import dev.vincenzocostagliola.designsystem.composables.ObserveLifecycle
 import dev.vincenzocostagliola.designsystem.composables.Progress
 import dev.vincenzocostagliola.designsystem.composables.ShortInfoListItem
-import dev.vincenzocostagliola.designsystem.composables.ObserveLifecycle
 import dev.vincenzocostagliola.designsystem.theme.ExtraLight
 import dev.vincenzocostagliola.designsystem.theme.Purple40
 import dev.vincenzocostagliola.designsystem.values.Dimens
@@ -91,7 +92,9 @@ private fun ShowError(newResources: ErrorResources, performAction: (DialogAction
 private fun ShowList(list: List<InfoUi>, onClick: (Int) -> Unit, addToDo: () -> Unit) {
     Scaffold(
         modifier = Modifier
-            .background(ExtraLight),
+            .background(ExtraLight)
+            .windowInsetsPadding(WindowInsets.systemBars)
+            .fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = addToDo,
@@ -104,7 +107,6 @@ private fun ShowList(list: List<InfoUi>, onClick: (Int) -> Unit, addToDo: () -> 
         content = { innerPadding ->
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding(horizontal = Dimens.XRegular)
                     .consumeWindowInsets(innerPadding)
             ) {
