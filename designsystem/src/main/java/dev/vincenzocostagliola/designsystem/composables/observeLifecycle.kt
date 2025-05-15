@@ -7,12 +7,12 @@ import androidx.lifecycle.LifecycleObserver
 import timber.log.Timber
 
 @Composable
-fun <LO : LifecycleObserver> LO.observeLifecycle(lifecycle: Lifecycle) {
+fun <LO : LifecycleObserver> LO.ObserveLifecycle(lifecycle: Lifecycle) {
   DisposableEffect(lifecycle) {
     Timber.d("LifecycleObserver - currentState: ${lifecycle.currentState}")
-    lifecycle.addObserver(this@observeLifecycle)
+    lifecycle.addObserver(this@ObserveLifecycle)
     onDispose {
-      lifecycle.removeObserver(this@observeLifecycle)
+      lifecycle.removeObserver(this@ObserveLifecycle)
     }
   }
 }

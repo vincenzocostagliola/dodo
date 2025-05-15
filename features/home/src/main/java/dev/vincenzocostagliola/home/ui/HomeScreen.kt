@@ -21,7 +21,7 @@ import dev.vincenzocostagliola.designsystem.composables.ErrorDialog
 import dev.vincenzocostagliola.designsystem.composables.InfoUi
 import dev.vincenzocostagliola.designsystem.composables.Progress
 import dev.vincenzocostagliola.designsystem.composables.ShortInfoListItem
-import dev.vincenzocostagliola.designsystem.composables.observeLifecycle
+import dev.vincenzocostagliola.designsystem.composables.ObserveLifecycle
 import dev.vincenzocostagliola.designsystem.theme.ExtraLight
 import dev.vincenzocostagliola.designsystem.theme.Purple40
 import dev.vincenzocostagliola.designsystem.values.Dimens
@@ -40,7 +40,7 @@ fun HomeScreen(viewModel: HomeViewModel, navigateToDetail: (Int) -> Unit) {
 
 @Composable
 private fun ManageLifeCycleEvent(viewModel: HomeViewModel) {
-    viewModel.observeLifecycle(LocalLifecycleOwner.current.lifecycle)
+    viewModel.ObserveLifecycle(LocalLifecycleOwner.current.lifecycle)
 }
 
 @Composable
