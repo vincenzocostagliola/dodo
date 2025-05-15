@@ -84,12 +84,12 @@ class DetailsViewModel @Inject internal constructor(
         }
     }
 
-    private var savedId: Int = 0
+    private var savedId: Int? = null
 
     @VisibleForTesting
     private suspend fun retrieveToDo(id: Int?) {
 
-        savedId = id ?: 0
+        savedId = id
 
         Timber.d("DetailsScreen - DetailsViewModel -  retrieveToDo")
 

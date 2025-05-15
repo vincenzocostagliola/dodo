@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Aod
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -28,7 +30,7 @@ import dev.vincenzocostagliola.designsystem.values.Dimens
 import timber.log.Timber
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, navigateToDetail: (Int) -> Unit) {
+fun HomeScreen(viewModel: HomeViewModel, navigateToDetail: (Int?) -> Unit) {
     val state: State<HomeScreenState> = viewModel.homeScreenState.collectAsState()
     val viewState = state.value
     Timber.d("HomeScreen - ViewState: $viewState")
@@ -47,7 +49,7 @@ private fun ManageLifeCycleEvent(viewModel: HomeViewModel) {
 private fun ManageState(
     viewState: HomeScreenState,
     viewModel: HomeViewModel,
-    navigateToDetail: (Int) -> Unit
+    navigateToDetail: (Int?) -> Unit
 ) {
     when (viewState) {
         is HomeScreenState.Error -> {
@@ -68,8 +70,8 @@ private fun ManageState(
                     Timber.d("HomeScreen - App Navigation - sent = $id")
                     navigateToDetail(id)
                 },
-                refresh = {
-                    viewModel.sendEvent(HomeScreenEvents.GetAllActivities)
+                addToDo = {
+                    navigateToDetail(null)
                 }
             )
         }
@@ -86,17 +88,17 @@ private fun ShowError(newResources: ErrorResources, performAction: (DialogAction
 }
 
 @Composable
-private fun ShowList(list: List<InfoUi>, onClick: (Int) -> Unit, refresh: () -> Unit) {
+private fun ShowList(list: List<InfoUi>, onClick: (Int) -> Unit, addToDo: () -> Unit) {
     Scaffold(
         modifier = Modifier
             .background(ExtraLight),
         floatingActionButton = {
             FloatingActionButton(
-                onClick = refresh,
+                onClick = addToDo,
                 containerColor = Purple40,
                 contentColor = ExtraLight
             ) {
-                Icon(Icons.Filled.Refresh, "")
+                Icon(Icons.Filled.Add, "")
             }
         },
         content = { innerPadding ->

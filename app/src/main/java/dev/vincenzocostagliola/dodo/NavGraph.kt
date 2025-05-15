@@ -20,8 +20,13 @@ internal fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = NavigationRoute.Home.route) {
         composable(NavigationRoute.Home.route) {
             val viewModel = hiltViewModel<HomeViewModel>()
-            val navigateToDetail: (Int) -> Unit = {
-                navController.navigate(NavigationRoute.DetailsScreen.createRoute(it))
+            val navigateToDetail: (Int?) -> Unit = {
+                val route = if (it != null) {
+                    NavigationRoute.DetailsScreen.createRoute(it)
+                } else {
+                    NavigationRoute.DetailsScreen.createRouteWithNullable()
+                }
+                navController.navigate(route)
             }
             HomeScreen(viewModel, navigateToDetail)
         }
@@ -29,11 +34,15 @@ internal fun NavGraph(navController: NavHostController) {
         composable(
             route = NavigationRoute.DetailsScreen.route,
             arguments = listOf(navArgument(NavigationRoute.DetailsScreen.argumentId) {
-                type = NavType.IntType
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
             })
         ) { backStackEntry ->
             val id: Int? =
-                backStackEntry.arguments?.getInt(NavigationRoute.DetailsScreen.argumentId)
+                backStackEntry.arguments?.getString(
+                    NavigationRoute.DetailsScreen.argumentId
+                )?.toIntOrNull()
 
             Timber.d("Navigation - received id = $id")
             val viewModel = hiltViewModel<DetailsViewModel>()
