@@ -1,7 +1,5 @@
 package dev.vincenzocostagliola.dodo
 
-import dev.vincenzocostagliola.dodo.NavigationRoute.DetailsScreen.argumentId
-
 internal sealed class NavigationRoute() {
     abstract val route: String
 
