@@ -38,6 +38,9 @@ coroutines = "1.10.1"
 #room
 room = "2.7.1"
 room_compiler = "2.7.1"
+espressoCore = "3.5.1"
+appcompat = "1.6.1"
+material = "1.10.0"
 
 
 
@@ -100,6 +103,9 @@ coroutinesAndroid = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android
 room_runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room_ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room_compiler = { module = "androidx.room:room-compiler", version.ref = "room_compiler" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 
 [bundles]
@@ -141,6 +147,7 @@ test = [
 androidimplementationtest = [
     "ext-junit",
     "androidx-junit-ktx",
+    "threeTen"
 ]
 
 
