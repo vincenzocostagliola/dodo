@@ -5,6 +5,6 @@ import dev.vincenzocostagliola.settings.data.domain.SettingsDomain
 import dev.vincenzocostagliola.settings.data.dto.SettingsDto
 
 internal sealed class GetSettingsResult {
-    data class Success(val dto: SettingsDomain?) : GetSettingsResult()
+    data class Success(val settings: SettingsDomain?) : GetSettingsResult()
     data class Failure(val error: AppError) : GetSettingsResult()
 }

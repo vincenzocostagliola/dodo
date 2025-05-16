@@ -6,6 +6,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.data.datapersistence.DataPersistence
@@ -28,7 +29,7 @@ class DataModule() {
     @Provides
     @Singleton
     internal fun provideSharedPreference(
-        context: Context
+        @ApplicationContext context: Context
     ): DataPersistenceSP {
         return DataPersistenceSP(
             sharedPreferences = context.createSharedPref()
