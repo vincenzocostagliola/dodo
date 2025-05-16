@@ -53,9 +53,15 @@ class SettingsScreenViewModel @Inject internal constructor(
             when (event) {
                 is SettingsScreenEvents.GetSettings -> getSavedSettings()
                 is SettingsScreenEvents.PerformDialogAction -> performDialogAction(event.dialogAction)
-                is SettingsScreenEvents.SaveSettings -> TODO()
+                is SettingsScreenEvents.SaveSettings -> saveSetting(event.selectedOption)
             }
         }
+    }
+
+    private fun saveSetting(selectedOption: Option){
+        Timber.d("SettingScreen - SettingVieModel - saveSetting: $selectedOption")
+
+        useCase.saveSetting()
     }
 
     private suspend fun performDialogAction(action: DialogAction) {

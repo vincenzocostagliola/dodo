@@ -1,13 +1,16 @@
 package dev.vincenzocostagliola.settings.usecase
 
 import dev.vincenzocostagliola.data.error.ErrorManagement
+import dev.vincenzocostagliola.settings.data.domain.SettingsDomain
 import dev.vincenzocostagliola.settings.data.domain.result.GetSettingsResult
 import dev.vincenzocostagliola.settings.data.dto.result.GetSettingsDtoResult
 import dev.vincenzocostagliola.settings.repository.Repository
+import okhttp3.internal.http2.Settings
 import timber.log.Timber
 
 internal interface SettingsUseCase {
     suspend fun getSettings(): GetSettingsResult
+    suspend fun saveSetting(settings: SettingsDomain)
 }
 
 internal class SettingsUseCaseImpl(
@@ -30,5 +33,9 @@ internal class SettingsUseCaseImpl(
                 GetSettingsResult.Success(result.dto?.toDomain())
             }
         }
+    }
+
+    override suspend fun saveSetting(settings: SettingsDomain) {
+        repository.saveSetting(settings.toDTO())
     }
 }

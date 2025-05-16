@@ -2,11 +2,14 @@ package dev.vincenzocostagliola.settings.repository
 
 import dev.vincenzocostagliola.data.datapersistence.DataPersistence
 import dev.vincenzocostagliola.data.datapersistence.data.GetSettingsResultDP
+import dev.vincenzocostagliola.settings.data.domain.SettingsDomain
+import dev.vincenzocostagliola.settings.data.dto.SettingsDto
 import dev.vincenzocostagliola.settings.data.dto.SettingsDto.Companion.toDTO
 import dev.vincenzocostagliola.settings.data.dto.result.GetSettingsDtoResult
 
 internal interface Repository {
     suspend fun getSettings(): GetSettingsDtoResult
+    suspend fun saveSetting(setting: SettingsDto)
 }
 
 internal class RepositoryImpl(
