@@ -52,9 +52,21 @@ class SettingsScreenViewModel @Inject internal constructor(
         viewModelScope.launch(Dispatchers.IO) {
             when (event) {
                 is SettingsScreenEvents.GetSettings -> getSavedSettings()
-                is SettingsScreenEvents.PerformDialogAction -> TODO()
+                is SettingsScreenEvents.PerformDialogAction -> performDialogAction(event.dialogAction)
                 is SettingsScreenEvents.SaveSettings -> TODO()
             }
+        }
+    }
+
+    private suspend fun performDialogAction(action: DialogAction) {
+        when (action) {
+            DialogAction.Leave -> Unit //TBD
+            DialogAction.Quit -> {
+                // Perform a logout if signed or go out from the app
+                Unit
+            }
+
+            DialogAction.Retry -> sendEvent(SettingsScreenEvents.GetSettings)
         }
     }
 
