@@ -1,8 +1,9 @@
 package dev.vincenzocostagliola.settings.data.dto
 
 import dev.vincenzocostagliola.data.datapersistence.data.SettingsDP
+import dev.vincenzocostagliola.settings.data.domain.SettingsDomain
 
-data class SettingsDto(
+internal data class SettingsDto(
     val orderSelected: OrderBy,
     val possibleSelections: List<OrderBy>
 ) {
@@ -14,6 +15,24 @@ data class SettingsDto(
         REVERSED_NAME,
         REVERSED_STATUS
     }
+
+    fun toDomain(): SettingsDomain? =
+        SettingsDomain(
+            orderSelected = orderSelected.toDomain(),
+            possibleSelections = possibleSelections.map { it.toDomain() }
+        )
+
+    private fun SettingsDto.OrderBy.toDomain(): SettingsDomain.OrderBy {
+        return when (this) {
+            OrderBy.DATE -> SettingsDomain.OrderBy.DATE
+            OrderBy.NAME -> SettingsDomain.OrderBy.NAME
+            OrderBy.STATUS -> SettingsDomain.OrderBy.STATUS
+            OrderBy.REVERSED_DATE -> SettingsDomain.OrderBy.REVERSED_DATE
+            OrderBy.REVERSED_NAME -> SettingsDomain.OrderBy.REVERSED_NAME
+            OrderBy.REVERSED_STATUS -> SettingsDomain.OrderBy.REVERSED_STATUS
+        }
+    }
+
 
     companion object {
         fun SettingsDP?.toDTO(): SettingsDto? {

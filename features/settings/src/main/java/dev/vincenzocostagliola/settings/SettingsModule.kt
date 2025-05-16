@@ -9,6 +9,7 @@ import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.settings.repository.Repository
 import dev.vincenzocostagliola.settings.repository.RepositoryImpl
 import dev.vincenzocostagliola.settings.usecase.SettingsUseCase
+import dev.vincenzocostagliola.settings.usecase.SettingsUseCaseImpl
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -28,7 +29,7 @@ internal class SettingsModule {
     internal fun provideUseCase(
         repository: Repository,
         errorManagement: ErrorManagement
-    ): SettingsUseCase = SettingsUseCase(
+    ): SettingsUseCase = SettingsUseCaseImpl(
         repository = repository,
         errorManagement = errorManagement
     )
