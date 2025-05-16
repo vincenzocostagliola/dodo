@@ -2,8 +2,6 @@ package dev.vincenzocostagliola.data.datapersistence
 
 import dev.vincenzocostagliola.data.datapersistence.data.GetSettingsResultDP
 import dev.vincenzocostagliola.data.datapersistence.data.SettingsDP
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import kotlin.coroutines.resume

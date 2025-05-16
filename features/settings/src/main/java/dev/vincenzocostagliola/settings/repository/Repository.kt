@@ -1,6 +1,8 @@
 package dev.vincenzocostagliola.settings.repository
 
 import dev.vincenzocostagliola.data.datapersistence.DataPersistence
+import dev.vincenzocostagliola.data.datapersistence.data.GetSettingsResultDP
+import dev.vincenzocostagliola.settings.data.dto.SettingsDto.Companion.toDTO
 import dev.vincenzocostagliola.settings.data.dto.result.GetSettingsDtoResult
 
 internal interface Repository {
@@ -14,6 +16,12 @@ internal class RepositoryImpl(
     override suspend fun getSettings(): GetSettingsDtoResult {
         val result = dataPersistence.getSettings()
 
+        return when (result) {
+            is GetSettingsResultDP.Failure -> GetSettingsDtoResult.Failure(result.error)
+            is GetSettingsResultDP.Success -> {
+                GetSettingsDtoResult.Success(result.setting?.toDTO())
+            }
+        }
 
     }
 

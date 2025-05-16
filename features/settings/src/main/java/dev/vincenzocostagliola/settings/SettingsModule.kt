@@ -1,27 +1,26 @@
-package dev.vincenzocostagliola.home
+package dev.vincenzocostagliola.settings
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dev.vincenzocostagliola.data.datapersistence.DataPersistence
 import dev.vincenzocostagliola.data.error.ErrorManagement
-import dev.vincenzocostagliola.db.DodoDB
-import dev.vincenzocostagliola.home.repository.Repository
-import dev.vincenzocostagliola.home.repository.RepositoryImpl
-import dev.vincenzocostagliola.home.usecase.HomeUseCase
-import dev.vincenzocostagliola.home.usecase.HomeUseCaseImpl
+import dev.vincenzocostagliola.settings.repository.Repository
+import dev.vincenzocostagliola.settings.repository.RepositoryImpl
+import dev.vincenzocostagliola.settings.usecase.SettingsUseCase
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-internal class HomeModule {
+internal class SettingsModule {
 
     @Provides
     @Singleton
     internal fun provideRepository(
-        db: DodoDB
+        dataPersistence: DataPersistence
     ): Repository = RepositoryImpl(
-        db = db
+        dataPersistence = dataPersistence
     )
 
     @Provides
@@ -29,7 +28,7 @@ internal class HomeModule {
     internal fun provideUseCase(
         repository: Repository,
         errorManagement: ErrorManagement
-    ): HomeUseCase = HomeUseCaseImpl(
+    ): SettingsUseCase = SettingsUseCase(
         repository = repository,
         errorManagement = errorManagement
     )
