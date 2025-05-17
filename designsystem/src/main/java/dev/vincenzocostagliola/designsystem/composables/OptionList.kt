@@ -73,9 +73,15 @@ fun OptionList(
 @Preview
 @Composable
 fun PreviewOptionList() {
+    var options by remember { mutableStateOf(getFakeList()) }
+
     OptionList(
-        list = getFakeList(),
-        optionSelected = { },
+        list = options,
+        optionSelected = { selected ->
+            options = options.map {
+                it.copy(isSelected = it.value == selected.value)
+            }
+        },
         modifier = Modifier
     )
 }

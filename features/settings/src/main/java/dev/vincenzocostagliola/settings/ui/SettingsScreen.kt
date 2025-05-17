@@ -6,6 +6,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import dev.vincenzocostagliola.data.error.DialogAction
@@ -38,6 +42,9 @@ private fun ManageState(
     viewModel: SettingsScreenViewModel,
     onBackPressed: () -> Unit
 ) {
+
+
+
     when (viewState) {
         is ScreenState.Error -> {
             ShowError(viewState.error.newResources) {
@@ -50,11 +57,17 @@ private fun ManageState(
         }
 
         is ScreenState.Success -> {
+            var options by remember { mutableStateOf<List<Option>>(viewState.list) }
             Progress(false)
             ShowSettings(
-                optionList = viewState.list,
+                optionList = options,
                 onBackPressed = onBackPressed,
-                onValueChange = { viewModel.sendEvent(SettingsScreenEvents.SaveSettings(it)) }
+                onValueChange = { option ->
+                    options = options.map {
+                        it.copy(isSelected = it.value == option.value)
+                    }
+                    viewModel.sendEvent(SettingsScreenEvents.SaveSettings(option))
+                }
             )
         }
     }
