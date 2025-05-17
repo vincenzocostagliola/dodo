@@ -3,6 +3,7 @@ package dev.vincenzocostagliola.home
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.vincenzocostagliola.data.datapersistence.DataPersistence
 import dev.vincenzocostagliola.data.error.ErrorManagement
@@ -11,6 +12,9 @@ import dev.vincenzocostagliola.home.repository.Repository
 import dev.vincenzocostagliola.home.repository.RepositoryImpl
 import dev.vincenzocostagliola.home.usecase.HomeUseCase
 import dev.vincenzocostagliola.home.usecase.HomeUseCaseImpl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -31,9 +35,16 @@ internal class HomeModule {
     @Singleton
     internal fun provideUseCase(
         repository: Repository,
-        errorManagement: ErrorManagement
+        errorManagement: ErrorManagement,
+        appScope: CoroutineScope
+
     ): HomeUseCase = HomeUseCaseImpl(
         repository = repository,
-        errorManagement = errorManagement
+        errorManagement = errorManagement,
+        appScope = appScope
     )
+
+    @Provides
+    fun provideApplicationScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
 }

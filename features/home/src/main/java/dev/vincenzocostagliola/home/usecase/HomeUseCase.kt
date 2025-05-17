@@ -1,5 +1,6 @@
 package dev.vincenzocostagliola.home.usecase
 
+import dev.vincenzocostagliola.data.error.AppError
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.home.data.domain.SettingsDomain.OrderBy
 import dev.vincenzocostagliola.home.data.domain.result.GetActivityResult
@@ -7,13 +8,17 @@ import dev.vincenzocostagliola.home.data.domain.result.GetSettingsResult
 import dev.vincenzocostagliola.home.data.dto.result.GetActivityResultDto
 import dev.vincenzocostagliola.home.data.dto.result.GetSettingsDtoResult
 import dev.vincenzocostagliola.home.repository.Repository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,7 +28,8 @@ internal interface HomeUseCase {
 
 internal class HomeUseCaseImpl @Inject internal constructor(
     private val repository: Repository,
-    private val errorManagement: ErrorManagement
+    private val errorManagement: ErrorManagement,
+    private val appScope: CoroutineScope
 ) : HomeUseCase {
 
     private fun getAllActivities(): Flow<GetActivityResult> {
@@ -83,29 +89,36 @@ internal class HomeUseCaseImpl @Inject internal constructor(
                     }
                 }
             }
-        }.flowOn(Dispatchers.IO)
+        }
     }
 
 
-    private fun getSettings(): Flow<GetSettingsResult> {
-        Timber.d("HomeScreen - HomeUseCase - getSettings")
-        return flow {
-            val result = repository.getSettings()
-            when (result) {
-                is GetSettingsDtoResult.Failure -> {
-                    val error = errorManagement.manageException(result.error)
-                    Timber.d("HomeScreen - HomeUseCase - getSettings Failure: $error")
-                    emit(GetSettingsResult.Failure(error))
-                }
+    private val settingsFlow: StateFlow<GetSettingsResult> = flow {
+        emit(getSettingsSync()) // Call the suspend version
+    }.stateIn(
+        scope = appScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = GetSettingsResult.Failure(AppError.GenericError)
+    )
 
-                is GetSettingsDtoResult.Success -> {
-                    val domainResult = result.dto?.toDomain()
-                    Timber.d("HomeScreen - HomeUseCase - getSettings Success: $domainResult")
-                    emit(GetSettingsResult.Success(domainResult))
-                }
+    private suspend fun getSettingsSync(): GetSettingsResult {
+        val result = repository.getSettings()
+        return when (result) {
+            is GetSettingsDtoResult.Failure -> {
+                val error = errorManagement.manageException(result.error)
+                Timber.d("HomeScreen - getSettings Failure: $error")
+                GetSettingsResult.Failure(error)
+            }
+
+            is GetSettingsDtoResult.Success -> {
+                val domainResult = result.dto?.toDomain()
+                Timber.d("HomeScreen - getSettings Success: $domainResult")
+                GetSettingsResult.Success(domainResult)
             }
         }
     }
+
+    private  fun getSettings(): Flow<GetSettingsResult> = settingsFlow
 }
 
 
