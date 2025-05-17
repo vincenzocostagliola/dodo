@@ -28,6 +28,7 @@ import dev.vincenzocostagliola.designsystem.composables.Progress
 import dev.vincenzocostagliola.designsystem.composables.TopBar
 import dev.vincenzocostagliola.designsystem.theme.ExtraLight
 import dev.vincenzocostagliola.designsystem.theme.Purple40
+import dev.vincenzocostagliola.details.data.domain.Todo
 import dev.vincenzocostagliola.details.ui.ScreenEvents.GetTodo
 import timber.log.Timber
 
@@ -68,11 +69,11 @@ private fun ManageState(
         }
 
         is ScreenState.Success -> {
-            var options by remember { mutableStateOf<List<Option>>(viewState.todo.statusOptions) }
+            var todo by remember { mutableStateOf<InfoForm>(viewState.todo) }
 
             Progress(false)
             ShowTodo(
-                info = viewState.todo,
+                info = todo,
                 onBackPressed = onBackPressed,
                 modifyOrSave = {
                     viewModel.sendEvent(
@@ -81,9 +82,10 @@ private fun ManageState(
                 },
                 onValueChange = { viewModel.sendEvent(ScreenEvents.OnValueChanged(it)) },
                 onStatusChange = { option ->
-                    options = options.map {
+                    val options = todo.statusOptions.map {
                         it.copy(isSelected = it.value == option.value)
                     }
+                    todo.copy(statusOptions = options)
                     viewModel.sendEvent(ScreenEvents.OnStatusChange(option))
                 }
             )

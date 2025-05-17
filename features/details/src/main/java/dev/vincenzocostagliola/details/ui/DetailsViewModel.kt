@@ -137,7 +137,7 @@ class DetailsViewModel @Inject internal constructor(
         return form.statusOptions
             .filterNot { it.value == option.value }
             .toMutableList()
-            .apply { add(option) }
+            .apply { add(option.copy(isSelected = true)) }
     }
 
     private fun updateFieldForm(

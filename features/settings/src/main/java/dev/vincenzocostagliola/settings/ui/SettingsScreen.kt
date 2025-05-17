@@ -106,21 +106,16 @@ private fun ShowSettings(
             )
         },
     ) {
-     /*   LazyColumn(
-            modifier = Modifier
-                .widthIn(max = 480.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(vertical = 24.dp)
-        ) {*/
             Column(
                 modifier = modifier
                     .widthIn(max = 480.dp)
+                    .padding(it)
                     .verticalScroll(rememberScrollState())
             ) {
                 this@Column.OptionList(
                     list = optionList,
                     onOptionSelected = { onValueChange(it) },
-                    modifier = Modifier.padding(it),
+                    modifier = modifier,
                     titleText = stringResource(R.string.sort_by),
                 )
             }
