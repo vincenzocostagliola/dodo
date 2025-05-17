@@ -1,7 +1,11 @@
 package dev.vincenzocostagliola.settings.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -12,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.data.error.ErrorResources
 import dev.vincenzocostagliola.designsystem.composables.ErrorDialog
@@ -42,7 +47,6 @@ private fun ManageState(
     viewModel: SettingsScreenViewModel,
     onBackPressed: () -> Unit
 ) {
-
 
 
     when (viewState) {
@@ -99,11 +103,20 @@ private fun ShowSettings(
             )
         },
     ) {
-        OptionList(
-            list = optionList,
-            onOptionSelected = { onValueChange(it) },
-            modifier = Modifier.padding(it),
-            titleText = stringResource(R.string.sort_by),
-        )
+        LazyColumn(
+            modifier = Modifier
+                .widthIn(max = 480.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(vertical = 24.dp)
+        ) {
+            item {
+                this@LazyColumn.OptionList(
+                    list = optionList,
+                    onOptionSelected = { onValueChange(it) },
+                    modifier = Modifier.padding(it),
+                    titleText = stringResource(R.string.sort_by),
+                )
+            }
+        }
     }
 }

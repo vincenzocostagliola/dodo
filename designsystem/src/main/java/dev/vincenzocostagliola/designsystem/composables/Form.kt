@@ -118,14 +118,16 @@ fun Form(
                 onValueChange = { onValueChange(it) },
                 readOnly = info.readOnly
             )
+
         }
         item {
-            OptionList(
+            this@LazyColumn.OptionList(
                 list = info.statusOptions,
                 onOptionSelected = { onStatusChange(it) },
                 modifier = modifier,
                 titleText = stringResource(R.string.status_title)
             )
+
         }
     }
 }

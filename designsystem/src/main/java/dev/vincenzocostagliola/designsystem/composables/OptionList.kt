@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -25,48 +26,40 @@ import androidx.compose.ui.unit.dp
 data class Option(
     val value: String,
     val isSelected: Boolean,
-    val isClickable : Boolean
+    val isClickable: Boolean
 )
 
 
 @Composable
-fun OptionList(
+fun LazyListScope.OptionList(
     list: List<Option>,
     onOptionSelected: (Option) -> Unit,
     modifier: Modifier = Modifier,
     titleText: String
 ) {
-    LazyColumn(
-        modifier = modifier
-            .widthIn(max = 480.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(vertical = 24.dp)
-    ) {
+    item {
+        Text(
+            text = titleText,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 8.dp)
+        )
+    }
 
-        item {
-            Text(
-                text = titleText,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 8.dp)
+    items(list.size) { index ->
+        val option = list[index]
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .clickable { if (option.isClickable) onOptionSelected(option) else Unit }
+        ) {
+            RadioButton(
+                selected = option.isSelected,
+                onClick = null
             )
-        }
-
-        items(list.size) { index ->
-            val option = list[index]
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .clickable { if(option.isClickable) onOptionSelected(option) else Unit }
-            ) {
-                RadioButton(
-                    selected = option.isSelected,
-                    onClick = null
-                )
-                Text(text = option.value)
-            }
+            Text(text = option.value)
         }
     }
 }
@@ -76,17 +69,25 @@ fun OptionList(
 @Composable
 fun PreviewOptionList() {
     var options by remember { mutableStateOf(getFakeList()) }
-
-    OptionList(
-        list = options,
-        onOptionSelected = { selected ->
-            options = options.map {
-                it.copy(isSelected = it.value == selected.value)
-            }
-        },
-        modifier = Modifier,
-        titleText = "Title"
-    )
+    LazyColumn(
+        modifier = Modifier
+            .widthIn(max = 480.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(vertical = 24.dp)
+    ) {
+        item {
+            this@LazyColumn.OptionList(
+                list = options,
+                onOptionSelected = { selected ->
+                    options = options.map {
+                        it.copy(isSelected = it.value == selected.value)
+                    }
+                },
+                modifier = Modifier,
+                titleText = "Title"
+            )
+        }
+    }
 }
 
 private fun getFakeList(): List<Option> {
