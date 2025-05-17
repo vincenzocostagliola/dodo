@@ -73,14 +73,14 @@ class HomeViewModel @Inject internal constructor(
 
     @VisibleForTesting
     private suspend fun getAllActivities() {
-        Timber.d("HomeScreen - HomeViewModel -  getAllActivities")
+        Timber.d("HomeScreen - HomeViewModel -  getOrderedActivities")
 
         _homeScreenState.update {
             HomeScreenState.Loading
         }
 
-        useCase.getAllActivities().collect {
-            Timber.d("HomeScreen - HomeViewModel -  getAllActivities : $it")
+        useCase.getOrderedActivities().collect {
+            Timber.d("HomeScreen - HomeViewModel -  getOrderedActivities - collect: $it")
             executeCollect(it)
         }
     }

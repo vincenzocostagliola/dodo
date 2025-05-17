@@ -1,20 +1,24 @@
 package dev.vincenzocostagliola.home.usecase
 
 import dev.vincenzocostagliola.data.error.ErrorManagement
+import dev.vincenzocostagliola.home.data.domain.SettingsDomain.OrderBy
 import dev.vincenzocostagliola.home.data.domain.result.GetActivityResult
 import dev.vincenzocostagliola.home.data.domain.result.GetSettingsResult
 import dev.vincenzocostagliola.home.data.dto.result.GetActivityResultDto
 import dev.vincenzocostagliola.home.data.dto.result.GetSettingsDtoResult
 import dev.vincenzocostagliola.home.repository.Repository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
 
 internal interface HomeUseCase {
-    fun getAllActivities(): Flow<GetActivityResult>
-    fun getSettings(): Flow<GetSettingsResult>
-
+    fun getOrderedActivities(): Flow<GetActivityResult>
 }
 
 internal class HomeUseCaseImpl @Inject internal constructor(
@@ -22,7 +26,7 @@ internal class HomeUseCaseImpl @Inject internal constructor(
     private val errorManagement: ErrorManagement
 ) : HomeUseCase {
 
-    override fun getAllActivities(): Flow<GetActivityResult> {
+    private fun getAllActivities(): Flow<GetActivityResult> {
         Timber.d("HomeScreen - HomeUseCase - getAllActivities")
 
         return flow {
@@ -44,7 +48,46 @@ internal class HomeUseCaseImpl @Inject internal constructor(
         }
     }
 
-    override fun getSettings(): Flow<GetSettingsResult> {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getOrderedActivities(): Flow<GetActivityResult> {
+        return getSettings().flatMapMerge { settingsResult ->
+            Timber.d("HomeScreen - HomeUseCase -  getOrderedActivities - settingsResult: $settingsResult")
+
+            val orderBy : OrderBy = when (settingsResult) {
+                is GetSettingsResult.Failure -> OrderBy.NOT_ORDERED
+                is GetSettingsResult.Success -> settingsResult.settings?.orderSelected
+                    ?: OrderBy.NOT_ORDERED
+            }
+
+            getAllActivities().map { activityResult ->
+                Timber.d("HomeScreen - HomeUseCase -  getOrderedActivities - activityResult: $activityResult")
+
+                when (activityResult) {
+                    is GetActivityResult.Failure -> activityResult
+                    is GetActivityResult.Success -> {
+                        val orderedList = activityResult.list.sortedWith(
+                            when (orderBy) {
+                                OrderBy.DATE -> compareBy { it.addedDate } // Replace with actual date field if available
+                                OrderBy.NAME -> compareBy { it.title.lowercase() }
+                                OrderBy.STATUS -> compareBy { it.status.lowercase() }
+
+                                OrderBy.REVERSED_DATE -> compareByDescending { it.id } // Replace with actual date
+                                OrderBy.REVERSED_NAME -> compareByDescending { it.title.lowercase() }
+                                OrderBy.REVERSED_STATUS -> compareByDescending { it.status.lowercase() }
+
+                                OrderBy.NOT_ORDERED -> null
+                            } ?: Comparator { _, _ -> 0 }
+                        )
+
+                        GetActivityResult.Success(orderedList)
+                    }
+                }
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+
+    private fun getSettings(): Flow<GetSettingsResult> {
         Timber.d("HomeScreen - HomeUseCase - getSettings")
         return flow {
             val result = repository.getSettings()
@@ -52,13 +95,13 @@ internal class HomeUseCaseImpl @Inject internal constructor(
                 is GetSettingsDtoResult.Failure -> {
                     val error = errorManagement.manageException(result.error)
                     Timber.d("HomeScreen - HomeUseCase - getSettings Failure: $error")
-                    GetSettingsResult.Failure(error)
+                    emit(GetSettingsResult.Failure(error))
                 }
 
                 is GetSettingsDtoResult.Success -> {
                     val domainResult = result.dto?.toDomain()
                     Timber.d("HomeScreen - HomeUseCase - getSettings Success: $domainResult")
-                    GetSettingsResult.Success(domainResult)
+                    emit(GetSettingsResult.Success(domainResult))
                 }
             }
         }

@@ -17,7 +17,8 @@ internal data class TodoDto(
             id = id,
             title = title,
             description = description,
-            status = status
+            status = status,
+            addedDate = addedDate
         )
     }
 
