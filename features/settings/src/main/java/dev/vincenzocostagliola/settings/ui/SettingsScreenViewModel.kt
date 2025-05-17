@@ -1,6 +1,5 @@
 package dev.vincenzocostagliola.settings.ui
 
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,10 +18,10 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-internal sealed class SettingsScreenState {
-    data object Loading : SettingsScreenState()
-    data class Success(val list: List<Option>) : SettingsScreenState()
-    data class Error(val error: AppError) : SettingsScreenState()
+internal sealed class ScreenState {
+    data object Loading : ScreenState()
+    data class Success(val list: List<Option>) : ScreenState()
+    data class Error(val error: AppError) : ScreenState()
 }
 
 sealed class SettingsScreenEvents {
@@ -38,9 +37,9 @@ class SettingsScreenViewModel @Inject internal constructor(
 ) : ViewModel() {
 
 
-    private val _settingScreenState: MutableStateFlow<SettingsScreenState> =
-        MutableStateFlow(SettingsScreenState.Loading)
-    internal val settingScreenState: StateFlow<SettingsScreenState>
+    private val _settingScreenState: MutableStateFlow<ScreenState> =
+        MutableStateFlow(ScreenState.Loading)
+    internal val screenState: StateFlow<ScreenState>
         get() = _settingScreenState
 
     init {
@@ -82,7 +81,7 @@ class SettingsScreenViewModel @Inject internal constructor(
 
         with(Dispatchers.Main) {
             _settingScreenState.update {
-                SettingsScreenState.Loading
+                ScreenState.Loading
             }
         }
         val result = useCase.getSettings()
@@ -92,13 +91,13 @@ class SettingsScreenViewModel @Inject internal constructor(
             when (result) {
                 is GetSettingsResult.Failure -> {
                     _settingScreenState.update {
-                        SettingsScreenState.Error(result.error)
+                        ScreenState.Error(result.error)
                     }
                 }
 
                 is GetSettingsResult.Success -> {
                     _settingScreenState.update {
-                        SettingsScreenState.Success(result.settings.toOptionList())
+                        ScreenState.Success(result.settings.toOptionList())
                     }
                 }
             }

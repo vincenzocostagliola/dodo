@@ -24,15 +24,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 data class Option(
-    val value : String,
-    val isSelected : Boolean
+    val value: String,
+    val isSelected: Boolean
 )
 
 
 @Composable
-fun OptionList(list: List<Option>, optionSelected: (String) -> Unit) {
+fun OptionList(
+    list: List<Option>,
+    optionSelected: (Option) -> Unit,
+    modifier: Modifier
+) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .widthIn(max = 480.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 24.dp)
@@ -56,14 +60,16 @@ fun OptionList(list: List<Option>, optionSelected: (String) -> Unit) {
                             .fillMaxWidth()
                             .padding(16.dp)
                     ) {
-                        RadioButton(selected = option.isSelected, onClick = { optionSelected(option.value)})
+                        RadioButton(
+                            selected = option.isSelected,
+                            onClick = { optionSelected(option) })
                         Text(text = option.value)
                     }
 
                 }
             }
         }
-}
+    }
 }
 
 
@@ -71,32 +77,33 @@ fun OptionList(list: List<Option>, optionSelected: (String) -> Unit) {
 @Composable
 fun PreviewOptionList() {
     OptionList(
-        getFakeList(),
-        optionSelected = {  }
+        list = getFakeList(),
+        optionSelected = { },
+        modifier = Modifier
     )
 }
 
 private fun getFakeList(): List<Option> {
-   return listOf(
-       Option(
-           value = "data",
-           isSelected = false
-       ),
-       Option(
-           value = "ora",
-           isSelected = false
-       ),
-       Option(
-           value = "status",
-           isSelected = false
-       ),
-       Option(
-           value = "nome",
-           isSelected = true
-       ),
-       Option(
-           value = "nessuno",
-           isSelected = false
-       )
-   )
+    return listOf(
+        Option(
+            value = "data",
+            isSelected = false
+        ),
+        Option(
+            value = "ora",
+            isSelected = false
+        ),
+        Option(
+            value = "status",
+            isSelected = false
+        ),
+        Option(
+            value = "nome",
+            isSelected = true
+        ),
+        Option(
+            value = "nessuno",
+            isSelected = false
+        )
+    )
 }
