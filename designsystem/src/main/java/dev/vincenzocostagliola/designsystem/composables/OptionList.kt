@@ -41,6 +41,7 @@ fun OptionList(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 24.dp)
     ) {
+
         item {
             Text(
                 text = "Sort By",
@@ -48,26 +49,27 @@ fun OptionList(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 8.dp)
             )
         }
-        item {
-            var selected by remember { mutableStateOf<Option?>(null) }
-            Column {
-                list.forEachIndexed { i, option ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(24.dp),
-                        modifier = Modifier
-                            .clickable { selected = option }
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        RadioButton(
-                            selected = option.isSelected,
-                            onClick = { optionSelected(option) })
-                        Text(text = option.value)
-                    }
+        items(list.size) { index ->
+            var selected by remember { mutableStateOf<Option>(Option("", false)) }
 
-                }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .clickable {
+                        selected = list[index].copy(isSelected = true)
+                        optionSelected(selected)
+                    }
+            ) {
+                RadioButton(
+                    selected = list[index].isSelected,
+                    onClick = null
+                )
+                Text(text = list[index].value)
             }
+
         }
     }
 }
