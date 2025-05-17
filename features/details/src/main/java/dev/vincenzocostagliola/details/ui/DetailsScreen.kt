@@ -82,8 +82,9 @@ private fun ManageState(
                 },
                 onValueChange = { viewModel.sendEvent(ScreenEvents.OnValueChanged(it)) },
                 onStatusChange = { option ->
+                    val updatedOption = option.copy(isSelected = true)
                     val options = todo.statusOptions.map {
-                        it.copy(isSelected = it.value == option.value)
+                        it.copy(isSelected = it.value == updatedOption.value)
                     }
                     todo.copy(statusOptions = options)
                     viewModel.sendEvent(ScreenEvents.OnStatusChange(option))
