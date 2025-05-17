@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dev.vincenzocostagliola.data.datapersistence.DataPersistence
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.db.DodoDB
 import dev.vincenzocostagliola.home.repository.Repository
@@ -19,9 +20,11 @@ internal class HomeModule {
     @Provides
     @Singleton
     internal fun provideRepository(
-        db: DodoDB
+        db: DodoDB,
+        dataPersistence: DataPersistence
     ): Repository = RepositoryImpl(
-        db = db
+        db = db,
+        dataPersistence = dataPersistence
     )
 
     @Provides

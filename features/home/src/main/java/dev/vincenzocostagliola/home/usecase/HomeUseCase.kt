@@ -2,7 +2,9 @@ package dev.vincenzocostagliola.home.usecase
 
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.home.data.domain.result.GetActivityResult
+import dev.vincenzocostagliola.home.data.domain.result.GetSettingsResult
 import dev.vincenzocostagliola.home.data.dto.result.GetActivityResultDto
+import dev.vincenzocostagliola.home.data.dto.result.GetSettingsDtoResult
 import dev.vincenzocostagliola.home.repository.Repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,6 +13,8 @@ import javax.inject.Inject
 
 internal interface HomeUseCase {
     fun getAllActivities(): Flow<GetActivityResult>
+    fun getSettings(): Flow<GetSettingsResult>
+
 }
 
 internal class HomeUseCaseImpl @Inject internal constructor(
@@ -36,6 +40,26 @@ internal class HomeUseCaseImpl @Inject internal constructor(
                 }
 
 
+            }
+        }
+    }
+
+    override fun getSettings(): Flow<GetSettingsResult> {
+        Timber.d("HomeScreen - HomeUseCase - getSettings")
+        return flow {
+            val result = repository.getSettings()
+            when (result) {
+                is GetSettingsDtoResult.Failure -> {
+                    val error = errorManagement.manageException(result.error)
+                    Timber.d("HomeScreen - HomeUseCase - getSettings Failure: $error")
+                    GetSettingsResult.Failure(error)
+                }
+
+                is GetSettingsDtoResult.Success -> {
+                    val domainResult = result.dto?.toDomain()
+                    Timber.d("HomeScreen - HomeUseCase - getSettings Success: $domainResult")
+                    GetSettingsResult.Success(domainResult)
+                }
             }
         }
     }
