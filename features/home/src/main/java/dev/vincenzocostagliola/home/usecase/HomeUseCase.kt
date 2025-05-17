@@ -93,14 +93,6 @@ internal class HomeUseCaseImpl @Inject internal constructor(
     }
 
 
-    private val settingsFlow: StateFlow<GetSettingsResult> = flow {
-        emit(getSettingsSync()) // Call the suspend version
-    }.stateIn(
-        scope = appScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = GetSettingsResult.Failure(AppError.GenericError)
-    )
-
     private suspend fun getSettingsSync(): GetSettingsResult {
         val result = repository.getSettings()
         return when (result) {
@@ -118,7 +110,9 @@ internal class HomeUseCaseImpl @Inject internal constructor(
         }
     }
 
-    private  fun getSettings(): Flow<GetSettingsResult> = settingsFlow
+    private  fun getSettings(): Flow<GetSettingsResult> = flow {
+        emit(getSettingsSync()) // Call the suspend version
+    }
 }
 
 
