@@ -1,11 +1,8 @@
 package dev.vincenzocostagliola.designsystem.composables
 
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -21,7 +18,7 @@ import dev.vincenzocostagliola.designsystem.R
 import org.threeten.bp.OffsetDateTime
 
 data class InfoForm(
-    val id: Int,
+    val id: Int?,
     val readOnly: Boolean,
     val addedDate: OffsetDateTime,
     val list: List<FieldForm>,
@@ -30,7 +27,7 @@ data class InfoForm(
     companion object {
         fun getEmptyInfoForm(optionList: List<Option>): InfoForm {
             return InfoForm(
-                id = -1,
+                id = null,
                 readOnly = false,
                 list = mutableListOf(
                     FieldForm.Title(

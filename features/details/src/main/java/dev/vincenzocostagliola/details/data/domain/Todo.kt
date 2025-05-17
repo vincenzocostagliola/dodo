@@ -8,7 +8,7 @@ import org.threeten.bp.OffsetDateTime
 import timber.log.Timber
 
 internal data class Todo(
-    val id: Int,
+    val id: Int?,
     val title: String,
     val description: String,
     val status: TodoStatus,

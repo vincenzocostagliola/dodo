@@ -7,13 +7,13 @@ import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 
 internal data class TodoDto(
-    val id : Int,
-    val title : String,
-    val description : String,
-    val status : String,
-    val addedDate : OffsetDateTime
-){
-    fun toDomain() : Todo {
+    val id: Int?,
+    val title: String,
+    val description: String,
+    val status: String,
+    val addedDate: OffsetDateTime
+) {
+    fun toDomain(): Todo {
         return Todo(
             id = id,
             title = title,
@@ -24,13 +24,22 @@ internal data class TodoDto(
     }
 
     fun toTodoDb(): TodoDb {
-        return TodoDb(
-            title = title,
-            description = description,
-            addedDate = addedDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
-            status = status,
-            id = id
-        )
+        return if (id != null) {
+            TodoDb(
+                title = title,
+                description = description,
+                addedDate = addedDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+                status = status,
+                id = id
+            )
+        } else {
+            TodoDb(
+                title = title,
+                description = description,
+                addedDate = addedDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+                status = status
+            )
+        }
     }
 }
 
