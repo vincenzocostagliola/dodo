@@ -45,14 +45,14 @@ fun ColumnScope.OptionList(
     Text(
         text = titleText,
         style = MaterialTheme.typography.titleMedium,
-        modifier = modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 8.dp)
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 8.dp)
     )
 
     list.forEach { option ->
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(24.dp),
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
                 .clickable { if (option.isClickable) onOptionSelected(option) else Unit }
