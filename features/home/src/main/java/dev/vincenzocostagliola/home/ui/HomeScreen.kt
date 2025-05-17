@@ -75,14 +75,17 @@ private fun ManageState(
             ShowList(
                 viewState.list,
                 onClick = { id ->
-                    Timber.d("HomeScreen - App Navigation - sent = $id")
+                    Timber.d("HomeScreen - App Navigation - onClick sent = $id")
                     navigateToDetail(id)
                 },
                 addToDo = {
+                    Timber.d("HomeScreen - App Navigation - addToDo sent = null")
+
                     navigateToDetail(null)
                 },
                 openSettings = {
-                    openSettings
+                    Timber.d("HomeScreen - App Navigation - openSettings sent")
+                    openSettings()
                 }
             )
         }
@@ -113,7 +116,7 @@ private fun ShowList(
         floatingActionButton = {
             Column {
                 FloatingActionButton(
-                    onClick = openSettings,
+                    onClick = { openSettings() },
                     containerColor = Purple40,
                     contentColor = ExtraLight,
                     modifier = Modifier.padding(bottom = Dimens.XSmall)

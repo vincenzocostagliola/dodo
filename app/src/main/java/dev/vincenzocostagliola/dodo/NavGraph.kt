@@ -31,8 +31,11 @@ internal fun NavGraph(navController: NavHostController) {
                 }
                 navController.navigate(route)
             }
-            val openSettings: () -> Unit =
-                { navController.navigate(NavigationRoute.SettingsScreen.createRoute()) }
+            val openSettings: () -> Unit = {
+                val route = NavigationRoute.SettingsScreen.createRoute()
+                Timber.d("Navigation - navigate to $route")
+                navController.navigate(route)
+            }
 
             HomeScreen(
                 viewModel = viewModel,
