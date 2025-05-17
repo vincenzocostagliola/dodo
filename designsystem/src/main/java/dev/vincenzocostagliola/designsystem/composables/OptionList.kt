@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 
 data class Option(
     val value : String,
-    val selection : String,
     val isSelected : Boolean
 )
 
@@ -81,28 +80,23 @@ private fun getFakeList(): List<Option> {
    return listOf(
        Option(
            value = "data",
-           isSelected = false,
-           selection = "data"
+           isSelected = false
        ),
        Option(
            value = "ora",
-           isSelected = false,
-           selection = "ora"
+           isSelected = false
        ),
        Option(
            value = "status",
-           isSelected = false,
-           selection = "status"
+           isSelected = false
        ),
        Option(
            value = "nome",
-           isSelected = true,
-           selection = "nome"
+           isSelected = true
        ),
        Option(
            value = "nessuno",
-           isSelected = false,
-           selection = "nessuno"
+           isSelected = false
        )
    )
 }

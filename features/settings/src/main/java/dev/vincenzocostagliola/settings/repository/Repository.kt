@@ -2,7 +2,7 @@ package dev.vincenzocostagliola.settings.repository
 
 import dev.vincenzocostagliola.data.datapersistence.DataPersistence
 import dev.vincenzocostagliola.data.datapersistence.data.GetSettingsResultDP
-import dev.vincenzocostagliola.settings.data.domain.SettingsDomain
+import dev.vincenzocostagliola.data.datapersistence.data.SettingsDP
 import dev.vincenzocostagliola.settings.data.dto.SettingsDto
 import dev.vincenzocostagliola.settings.data.dto.SettingsDto.Companion.toDTO
 import dev.vincenzocostagliola.settings.data.dto.result.GetSettingsDtoResult
@@ -28,4 +28,7 @@ internal class RepositoryImpl(
 
     }
 
+    override suspend fun saveSetting(setting: SettingsDto) {
+        dataPersistence.saveSettings(SettingsDP(orderSelected = setting.orderSelected))
+    }
 }

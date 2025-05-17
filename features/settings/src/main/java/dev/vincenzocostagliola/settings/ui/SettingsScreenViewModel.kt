@@ -8,6 +8,7 @@ import dev.vincenzocostagliola.data.error.AppError
 import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.designsystem.composables.Option
 import dev.vincenzocostagliola.settings.data.domain.SettingsDomain
+import dev.vincenzocostagliola.settings.data.domain.SettingsDomain.Companion.toDomain
 import dev.vincenzocostagliola.settings.data.domain.result.GetSettingsResult
 import dev.vincenzocostagliola.settings.usecase.SettingsUseCase
 import kotlinx.coroutines.Dispatchers
@@ -58,10 +59,10 @@ class SettingsScreenViewModel @Inject internal constructor(
         }
     }
 
-    private fun saveSetting(selectedOption: Option){
+    private suspend fun saveSetting(selectedOption: Option){
         Timber.d("SettingScreen - SettingVieModel - saveSetting: $selectedOption")
 
-        useCase.saveSetting()
+        useCase.saveSetting(selectedOption.toDomain())
     }
 
     private suspend fun performDialogAction(action: DialogAction) {
@@ -106,10 +107,9 @@ class SettingsScreenViewModel @Inject internal constructor(
 
     private fun SettingsDomain?.toOptionList(): List<Option> {
         return this?.let {
-            it.possibleSelections.map {
+            SettingsDomain.OrderBy.entries.map {
                 Option(
                     value = it.name,
-                    selection = it.name,
                     isSelected = it == this.orderSelected
                 )
             }
@@ -117,7 +117,6 @@ class SettingsScreenViewModel @Inject internal constructor(
             SettingsDomain.OrderBy.entries.map {
                 Option(
                     value = it.name,
-                    selection = it.name,
                     isSelected = false
                 )
             }

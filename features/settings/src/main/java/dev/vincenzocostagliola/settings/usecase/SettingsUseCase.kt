@@ -3,6 +3,7 @@ package dev.vincenzocostagliola.settings.usecase
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.settings.data.domain.SettingsDomain
 import dev.vincenzocostagliola.settings.data.domain.result.GetSettingsResult
+import dev.vincenzocostagliola.settings.data.dto.SettingsDto
 import dev.vincenzocostagliola.settings.data.dto.result.GetSettingsDtoResult
 import dev.vincenzocostagliola.settings.repository.Repository
 import okhttp3.internal.http2.Settings
@@ -36,6 +37,6 @@ internal class SettingsUseCaseImpl(
     }
 
     override suspend fun saveSetting(settings: SettingsDomain) {
-        repository.saveSetting(settings.toDTO())
+        repository.saveSetting(SettingsDto(orderSelected = settings.orderSelected.name))
     }
 }
