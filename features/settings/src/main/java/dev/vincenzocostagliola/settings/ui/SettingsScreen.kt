@@ -2,10 +2,13 @@ package dev.vincenzocostagliola.settings.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -103,14 +106,18 @@ private fun ShowSettings(
             )
         },
     ) {
-        LazyColumn(
+     /*   LazyColumn(
             modifier = Modifier
                 .widthIn(max = 480.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(vertical = 24.dp)
-        ) {
-            item {
-                this@LazyColumn.OptionList(
+        ) {*/
+            Column(
+                modifier = modifier
+                    .widthIn(max = 480.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                this@Column.OptionList(
                     list = optionList,
                     onOptionSelected = { onValueChange(it) },
                     modifier = Modifier.padding(it),
@@ -118,5 +125,4 @@ private fun ShowSettings(
                 )
             }
         }
-    }
 }

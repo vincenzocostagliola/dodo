@@ -2,10 +2,13 @@ package dev.vincenzocostagliola.designsystem.composables
 
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -22,10 +25,10 @@ data class InfoForm(
     val readOnly: Boolean,
     val addedDate: OffsetDateTime,
     val list: List<FieldForm>,
-    val statusOptions : List<Option>
+    val statusOptions: List<Option>
 ) {
     companion object {
-        fun getEmptyInfoForm(optionList : List<Option>): InfoForm {
+        fun getEmptyInfoForm(optionList: List<Option>): InfoForm {
             return InfoForm(
                 id = -1,
                 readOnly = false,
@@ -98,13 +101,12 @@ fun Form(
     onStatusChange: (Option) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    LazyColumn(
+    Column(
         modifier = modifier
-            .widthIn(max = 480.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(vertical = 24.dp)
+            .widthIn(max = 480.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        items(info.list.size) { item ->
+        info.list.forEach { item ->
             FormField(
                 focusManager = focusManager,
                 keyboardOptions = KeyboardOptions(
@@ -112,16 +114,16 @@ fun Form(
                     imeAction = ImeAction.Next,
                     capitalization = KeyboardCapitalization.Words
                 ),
-                label = info.list[item].getLabelFromType(),
+                label = item.getLabelFromType(),
                 imageVector = null,
-                info = info.list[item],
+                info = item,
                 onValueChange = { onValueChange(it) },
                 readOnly = info.readOnly
             )
 
         }
-        item {
-            this@LazyColumn.OptionList(
+
+            this@Column.OptionList(
                 list = info.statusOptions,
                 onOptionSelected = { onStatusChange(it) },
                 modifier = modifier,
@@ -129,7 +131,7 @@ fun Form(
             )
 
         }
-    }
+
 }
 
 /*

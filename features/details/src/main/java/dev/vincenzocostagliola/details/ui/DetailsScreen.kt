@@ -68,6 +68,8 @@ private fun ManageState(
         }
 
         is ScreenState.Success -> {
+            var options by remember { mutableStateOf<List<Option>>(viewState.todo.statusOptions) }
+
             Progress(false)
             ShowTodo(
                 info = viewState.todo,
@@ -78,7 +80,12 @@ private fun ManageState(
                     )
                 },
                 onValueChange = { viewModel.sendEvent(ScreenEvents.OnValueChanged(it)) },
-                onStatusChange = {viewModel.sendEvent(ScreenEvents.OnStatusChange(it))}
+                onStatusChange = { option ->
+                    options = options.map {
+                        it.copy(isSelected = it.value == option.value)
+                    }
+                    viewModel.sendEvent(ScreenEvents.OnStatusChange(option))
+                }
             )
         }
     }

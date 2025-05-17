@@ -3,6 +3,8 @@ package dev.vincenzocostagliola.designsystem.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -31,26 +35,24 @@ data class Option(
 
 
 @Composable
-fun LazyListScope.OptionList(
+fun ColumnScope.OptionList(
     list: List<Option>,
     onOptionSelected: (Option) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     titleText: String
 ) {
-    item {
-        Text(
-            text = titleText,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 8.dp)
-        )
-    }
 
-    items(list.size) { index ->
-        val option = list[index]
+    Text(
+        text = titleText,
+        style = MaterialTheme.typography.titleMedium,
+        modifier = modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 8.dp)
+    )
+
+    list.forEach { option ->
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(24.dp),
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(16.dp)
                 .clickable { if (option.isClickable) onOptionSelected(option) else Unit }
@@ -69,24 +71,21 @@ fun LazyListScope.OptionList(
 @Composable
 fun PreviewOptionList() {
     var options by remember { mutableStateOf(getFakeList()) }
-    LazyColumn(
+    Column(
         modifier = Modifier
-            .widthIn(max = 480.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(vertical = 24.dp)
+            .widthIn(max = 480.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        item {
-            this@LazyColumn.OptionList(
-                list = options,
-                onOptionSelected = { selected ->
-                    options = options.map {
-                        it.copy(isSelected = it.value == selected.value)
-                    }
-                },
-                modifier = Modifier,
-                titleText = "Title"
-            )
-        }
+        this@Column.OptionList(
+            list = options,
+            onOptionSelected = { selected ->
+                options = options.map {
+                    it.copy(isSelected = it.value == selected.value)
+                }
+            },
+            modifier = Modifier,
+            titleText = "Title"
+        )
     }
 }
 
