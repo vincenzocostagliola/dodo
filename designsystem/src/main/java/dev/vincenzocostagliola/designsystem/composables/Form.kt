@@ -1,7 +1,6 @@
 package dev.vincenzocostagliola.designsystem.composables
 
 
-import android.icu.text.IDNA
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.widthIn
@@ -9,14 +8,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.vincenzocostagliola.designsystem.R
 import org.threeten.bp.OffsetDateTime
@@ -25,10 +21,11 @@ data class InfoForm(
     val id: Int,
     val readOnly: Boolean,
     val addedDate: OffsetDateTime,
-    val list: List<FieldForm>
+    val list: List<FieldForm>,
+    val statusOptions : List<Option>
 ) {
     companion object {
-        fun getEmptyInfoForm(): InfoForm {
+        fun getEmptyInfoForm(optionList : List<Option>): InfoForm {
             return InfoForm(
                 id = -1,
                 readOnly = false,
@@ -42,13 +39,9 @@ data class InfoForm(
                         text = "",
                         singleLine = false,
                         isError = false
-                    ),
-                    FieldForm.Status(
-                        text = "",
-                        singleLine = false,
-                        isError = false
                     )
-                ), addedDate = OffsetDateTime.now()
+                ), addedDate = OffsetDateTime.now(),
+                statusOptions = optionList
             )
         }
     }
@@ -71,18 +64,11 @@ sealed class FieldForm {
         override val isError: Boolean
     ) : FieldForm()
 
-    data class Status(
-        override val text: String,
-        override val singleLine: Boolean,
-        override val isError: Boolean
-    ) : FieldForm()
-
 
     @Composable
     fun getLabelFromType(): String {
         return when (this) {
             is Description -> stringResource(R.string.description)
-            is Status -> stringResource(R.string.status)
             is Title -> stringResource(R.string.title)
         }
     }
@@ -90,12 +76,6 @@ sealed class FieldForm {
     fun updateFieldFormWithNewText(text: String): FieldForm {
         return when (this) {
             is Description -> Description(
-                text,
-                singleLine = singleLine,
-                isError = isError
-            )
-
-            is Status -> Status(
                 text,
                 singleLine = singleLine,
                 isError = isError
@@ -114,7 +94,8 @@ sealed class FieldForm {
 fun Form(
     info: InfoForm,
     modifier: Modifier = Modifier,
-    onValueChange: (FieldForm) -> Unit
+    onValueChange: (FieldForm) -> Unit,
+    onStatusChange: (Option) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     LazyColumn(
@@ -136,6 +117,14 @@ fun Form(
                 info = info.list[item],
                 onValueChange = { onValueChange(it) },
                 readOnly = info.readOnly
+            )
+        }
+        item {
+            OptionList(
+                list = info.statusOptions,
+                onOptionSelected = { onStatusChange(it) },
+                modifier = modifier,
+                titleText = stringResource(R.string.status_title)
             )
         }
     }

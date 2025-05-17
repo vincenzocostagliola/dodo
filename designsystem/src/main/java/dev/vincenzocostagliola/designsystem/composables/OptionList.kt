@@ -24,15 +24,17 @@ import androidx.compose.ui.unit.dp
 
 data class Option(
     val value: String,
-    val isSelected: Boolean
+    val isSelected: Boolean,
+    val isClickable : Boolean
 )
 
 
 @Composable
 fun OptionList(
     list: List<Option>,
-    optionSelected: (Option) -> Unit,
-    modifier: Modifier = Modifier
+    onOptionSelected: (Option) -> Unit,
+    modifier: Modifier = Modifier,
+    titleText: String
 ) {
     LazyColumn(
         modifier = modifier
@@ -43,7 +45,7 @@ fun OptionList(
 
         item {
             Text(
-                text = "Sort By",
+                text = titleText,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 8.dp)
             )
@@ -57,7 +59,7 @@ fun OptionList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .clickable { optionSelected(option) }
+                    .clickable { if(option.isClickable) onOptionSelected(option) else Unit }
             ) {
                 RadioButton(
                     selected = option.isSelected,
@@ -77,12 +79,13 @@ fun PreviewOptionList() {
 
     OptionList(
         list = options,
-        optionSelected = { selected ->
+        onOptionSelected = { selected ->
             options = options.map {
                 it.copy(isSelected = it.value == selected.value)
             }
         },
-        modifier = Modifier
+        modifier = Modifier,
+        titleText = "Title"
     )
 }
 
@@ -90,23 +93,28 @@ private fun getFakeList(): List<Option> {
     return listOf(
         Option(
             value = "data",
-            isSelected = false
+            isSelected = false,
+            isClickable = true
         ),
         Option(
             value = "ora",
-            isSelected = false
+            isSelected = false,
+            isClickable = true
         ),
         Option(
             value = "status",
-            isSelected = false
+            isSelected = false,
+            isClickable = true
         ),
         Option(
             value = "nome",
-            isSelected = true
+            isSelected = true,
+            isClickable = true
         ),
         Option(
             value = "nessuno",
-            isSelected = false
+            isSelected = false,
+            isClickable = true
         )
     )
 }

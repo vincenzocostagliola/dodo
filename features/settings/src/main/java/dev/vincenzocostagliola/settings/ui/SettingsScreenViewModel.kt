@@ -109,14 +109,16 @@ class SettingsScreenViewModel @Inject internal constructor(
             SettingsDomain.OrderBy.entries.map {
                 Option(
                     value = it.name,
-                    isSelected = it == this.orderSelected
+                    isSelected = it == this.orderSelected,
+                    isClickable = true
                 )
             }
         } ?: run {
             SettingsDomain.OrderBy.entries.map {
                 Option(
                     value = it.name,
-                    isSelected = false
+                    isSelected = false,
+                    isClickable = true
                 )
             }
         }

@@ -28,7 +28,7 @@ fun SettingsScreen(viewModel: SettingsScreenViewModel, onBackPressed: () -> Unit
     val state: State<ScreenState> = viewModel.screenState.collectAsState()
     val viewState = state.value
 
-    Timber.d("DetailsScreen - ViewState: $viewState")
+    Timber.d("SettingsScreen - ViewState: $viewState")
     ManageState(
         viewState = viewState,
         viewModel = viewModel,
@@ -101,8 +101,9 @@ private fun ShowSettings(
     ) {
         OptionList(
             list = optionList,
-            optionSelected = { onValueChange(it) },
+            onOptionSelected = { onValueChange(it) },
             modifier = Modifier.padding(it),
+            titleText = stringResource(R.string.sort_by),
         )
     }
 }

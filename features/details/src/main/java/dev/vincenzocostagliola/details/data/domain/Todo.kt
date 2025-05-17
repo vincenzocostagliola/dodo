@@ -2,6 +2,7 @@ package dev.vincenzocostagliola.details.data.domain
 
 import dev.vincenzocostagliola.designsystem.composables.FieldForm
 import dev.vincenzocostagliola.designsystem.composables.InfoForm
+import dev.vincenzocostagliola.designsystem.composables.Option
 import dev.vincenzocostagliola.details.data.dto.TodoDto
 import org.threeten.bp.OffsetDateTime
 import timber.log.Timber
@@ -10,25 +11,34 @@ internal data class Todo(
     val id: Int,
     val title: String,
     val description: String,
-    val status: String,
+    val status: TodoStatus,
     val addedDate: OffsetDateTime
 ) {
+    enum class TodoStatus {
+        TOSTART,
+        STARTED,
+        STOPPED,
+        FINISHED
+    }
+
+
+
+
     fun toDto(date: OffsetDateTime): TodoDto {
         return TodoDto(
             id = id,
             title = title,
             description = description,
-            status = status,
+            status = status.name,
             addedDate = date
         )
     }
 
     fun toInfoForm(readOnly: Boolean): InfoForm {
-        val updated =  InfoForm(
+        val updated = InfoForm(
             id = id,
             readOnly = isInError(title).not()
-                && isInError(description).not()
-                && isInError(status).not(),
+                    && isInError(description).not(),
             list = listOf(
                 FieldForm.Title(
                     text = title,
@@ -39,14 +49,14 @@ internal data class Todo(
                     text = description,
                     singleLine = false,
                     isError = isInError(description)
-                ),
-                FieldForm.Status(
-                    text = status,
-                    singleLine = false,
-                    isError = isInError(status)
                 )
             ),
-            addedDate = addedDate
+            addedDate = addedDate,
+            statusOptions =  TodoStatus.entries.map { status -> Option(
+                value = status.name,
+                isSelected = status == this.status,
+                isClickable = !readOnly
+            ) }
         )
 
         Timber.d("Todo - toInfoForm - updated : $updated")
@@ -65,9 +75,24 @@ internal data class Todo(
                 id = id,
                 title = list.first { it::class == FieldForm.Title::class }.text,
                 description = list.first { it::class == FieldForm.Description::class }.text,
-                status = list.first { it::class == FieldForm.Status::class }.text,
+                status = statusOptions
+                    .filter { it.isSelected }
+                    .map { option ->
+                        TodoStatus.entries
+                            .firstOrNull { option.value == it.name }
+                    }.firstOrNull() ?: TodoStatus.TOSTART,
                 addedDate = addedDate
             )
+        }
+
+        fun TodoStatus.toOption() : Option = Option(
+            value = this.name,
+            isSelected = false,
+            isClickable = true
+        )
+
+        fun getOptionList() : List<Option>{
+            return Todo.TodoStatus.entries.map { it.toOption() }
         }
     }
 }

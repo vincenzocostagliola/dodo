@@ -9,6 +9,10 @@ import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.designsystem.composables.FieldForm
 import dev.vincenzocostagliola.designsystem.composables.InfoForm
 import dev.vincenzocostagliola.designsystem.composables.InfoForm.Companion.getEmptyInfoForm
+import dev.vincenzocostagliola.designsystem.composables.Option
+import dev.vincenzocostagliola.details.data.domain.Todo
+import dev.vincenzocostagliola.details.data.domain.Todo.Companion.getOptionList
+import dev.vincenzocostagliola.details.data.domain.Todo.Companion.toOption
 import dev.vincenzocostagliola.details.data.domain.Todo.Companion.toTodo
 import dev.vincenzocostagliola.details.data.domain.result.GetActivityResult
 import dev.vincenzocostagliola.details.ui.ScreenState.Error
@@ -22,6 +26,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.collections.filterNot
 
 internal sealed class ScreenState {
     data object Loading : ScreenState()
@@ -34,6 +39,7 @@ sealed class ScreenEvents {
     data class ModifyOrSave(val modify: Boolean) : ScreenEvents()
     data class PerformDialogAction(val dialogAction: DialogAction) : ScreenEvents()
     data class OnValueChanged(val info: FieldForm) : ScreenEvents()
+    data class OnStatusChange(val option: Option) : ScreenEvents()
 
 }
 
@@ -47,7 +53,7 @@ class DetailsViewModel @Inject internal constructor(
     internal val screenState: StateFlow<ScreenState>
         get() = _screenState
 
-    private val infoFormState = MutableStateFlow(InfoForm.getEmptyInfoForm())
+    private val infoFormState = MutableStateFlow(InfoForm.getEmptyInfoForm(getOptionList()))
 
     init {
         observeInfoFormUpdates()
@@ -69,6 +75,7 @@ class DetailsViewModel @Inject internal constructor(
                 is ScreenEvents.PerformDialogAction -> performDialogAction(event.dialogAction)
                 is ScreenEvents.ModifyOrSave -> manageModifyOrSave(event.modify)
                 is ScreenEvents.OnValueChanged -> onValueChanged(event.info)
+                is ScreenEvents.OnStatusChange -> onStatusChange(event.option)
             }
         }
     }
@@ -107,15 +114,30 @@ class DetailsViewModel @Inject internal constructor(
     }
 
     private fun addNewTodo() {
-        infoFormState.update { getEmptyInfoForm() }
+        infoFormState.update { getEmptyInfoForm(getOptionList()) }
         _screenState.update { Success(infoFormState.value) }
     }
-
 
     private fun onValueChanged(info: FieldForm) {
         infoFormState.update {
             it.copy(list = updateFieldForm(it, info))
         }
+    }
+
+    private fun onStatusChange(option: Option) {
+        infoFormState.update {
+            it.copy(statusOptions = updateSelectedOption(it, option))
+        }
+    }
+
+    private fun updateSelectedOption(
+        form: InfoForm,
+        option: Option
+    ): MutableList<Option> {
+        return form.statusOptions
+            .filterNot { it.value == option.value }
+            .toMutableList()
+            .apply { add(option) }
     }
 
     private fun updateFieldForm(

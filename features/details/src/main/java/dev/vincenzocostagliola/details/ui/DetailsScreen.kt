@@ -23,6 +23,7 @@ import dev.vincenzocostagliola.designsystem.composables.ErrorDialog
 import dev.vincenzocostagliola.designsystem.composables.FieldForm
 import dev.vincenzocostagliola.designsystem.composables.Form
 import dev.vincenzocostagliola.designsystem.composables.InfoForm
+import dev.vincenzocostagliola.designsystem.composables.Option
 import dev.vincenzocostagliola.designsystem.composables.Progress
 import dev.vincenzocostagliola.designsystem.composables.TopBar
 import dev.vincenzocostagliola.designsystem.theme.ExtraLight
@@ -76,7 +77,8 @@ private fun ManageState(
                         ScreenEvents.ModifyOrSave(it)
                     )
                 },
-                onValueChange = { viewModel.sendEvent(ScreenEvents.OnValueChanged(it)) }
+                onValueChange = { viewModel.sendEvent(ScreenEvents.OnValueChanged(it)) },
+                onStatusChange = {viewModel.sendEvent(ScreenEvents.OnStatusChange(it))}
             )
         }
     }
@@ -97,7 +99,8 @@ private fun ShowTodo(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
     modifyOrSave: (Boolean) -> Unit,
-    onValueChange: (FieldForm) -> Unit
+    onValueChange: (FieldForm) -> Unit,
+    onStatusChange: (Option) -> Unit
 ) {
 
     Scaffold(
@@ -126,7 +129,8 @@ private fun ShowTodo(
         Form(
             info = info,
             modifier = Modifier.padding(it),
-            onValueChange = { onValueChange(it) }
+            onValueChange = { onValueChange(it) },
+            onStatusChange = { onStatusChange(it) }
         )
     }
 }
