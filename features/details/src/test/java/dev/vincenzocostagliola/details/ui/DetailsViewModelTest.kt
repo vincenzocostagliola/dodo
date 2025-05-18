@@ -3,6 +3,7 @@ package dev.vincenzocostagliola.details.ui
 import dev.vincenzocostagliola.data.error.AppError
 import dev.vincenzocostagliola.data.error.DialogAction
 import dev.vincenzocostagliola.designsystem.composables.FieldForm
+import dev.vincenzocostagliola.details.MainDispatcherRule
 import dev.vincenzocostagliola.details.data.domain.Todo
 import dev.vincenzocostagliola.details.data.domain.result.GetActivityResult
 import dev.vincenzocostagliola.details.usecase.UseCase
