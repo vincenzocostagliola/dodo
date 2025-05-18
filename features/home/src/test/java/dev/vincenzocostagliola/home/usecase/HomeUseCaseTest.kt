@@ -2,12 +2,16 @@ package dev.vincenzocostagliola.home.usecase
 
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.home.createTodoDtoList
+import dev.vincenzocostagliola.home.data.domain.SettingsDomain.OrderBy
 import dev.vincenzocostagliola.home.data.domain.Todo
 import dev.vincenzocostagliola.home.data.domain.result.GetActivityResult
+import dev.vincenzocostagliola.home.data.dto.SettingsDto
 import dev.vincenzocostagliola.home.data.dto.result.GetActivityResultDto
+import dev.vincenzocostagliola.home.data.dto.result.GetSettingsDtoResult
 import dev.vincenzocostagliola.home.repository.Repository
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
@@ -62,12 +66,15 @@ internal class HomeUseCaseImplTest {
         val dtoList = createTodoDtoList()
         var domainModelList = dtoList.map { it.toDomain() }
 
+        val settingsDto = SettingsDto(orderSelected = OrderBy.NAME.name)
+        coEvery  { repository.getSettings() } returns GetSettingsDtoResult.Success(settingsDto)
+
         every { repository.getAllActivities() } returns flow {
             emit(GetActivityResultDto.Success(dtoList))
         }
 
         // When
-        val result = useCase.getAllActivities().first()
+        val result = useCase.getOrderedActivities().first()
 
         // Then
         assert(result is GetActivityResult.Success)
@@ -80,9 +87,11 @@ internal class HomeUseCaseImplTest {
         every { repository.getAllActivities() } returns flow {
             emit(GetActivityResultDto.Success(emptyList()))
         }
+        val settingsDto = SettingsDto(orderSelected = OrderBy.NAME.name)
+        coEvery  { repository.getSettings() } returns GetSettingsDtoResult.Success(settingsDto)
 
         // When
-        val result = useCase.getAllActivities().first()
+        val result = useCase.getOrderedActivities().first()
 
         // Then
         assert(result is GetActivityResult.Success)
@@ -95,12 +104,15 @@ internal class HomeUseCaseImplTest {
         val error = Throwable()
         val appError = errorManagement.manageException(error)
 
+        val settingsDto = SettingsDto(orderSelected = OrderBy.NAME.name)
+        coEvery  { repository.getSettings() } returns GetSettingsDtoResult.Success(settingsDto)
+
         every { repository.getAllActivities() } returns flow {
             emit(GetActivityResultDto.Failure(error))
         }
 
         // When
-        val result = useCase.getAllActivities().first()
+        val result = useCase.getOrderedActivities().first()
 
         // Then
         assert(result is GetActivityResult.Failure)

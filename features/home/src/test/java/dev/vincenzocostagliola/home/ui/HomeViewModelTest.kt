@@ -48,7 +48,7 @@ internal class HomeViewModelTest {
     @Test
     fun `getAllActivities returns Success state when data is returned with emptyList`() =
         testScope.runTest {
-            every { homeUseCase.getAllActivities() } returns flow {
+            every { homeUseCase.getOrderedActivities() } returns flow {
                 emit(GetActivityResult.Success(emptyList()))
             }
 
@@ -67,7 +67,7 @@ internal class HomeViewModelTest {
         testScope.runTest {
             val dtoList = createTodoDtoList()
 
-            every { homeUseCase.getAllActivities() } returns flow {
+            every { homeUseCase.getOrderedActivities() } returns flow {
 
                 emit(GetActivityResult.Success(dtoList.map { it.toDomain() }))
             }
@@ -91,7 +91,7 @@ internal class HomeViewModelTest {
     fun `getAllActivities returns Error state when an error occurs`() = testScope.runTest {
 
         val error = AppError.GenericError
-        every { homeUseCase.getAllActivities() } returns flow {
+        every { homeUseCase.getOrderedActivities() } returns flow {
             emit(GetActivityResult.Failure(error))
         }
 
@@ -107,7 +107,7 @@ internal class HomeViewModelTest {
 
     @Test
     fun `getAllActivities returns Loading then Success`() = testScope.runTest {
-        every { homeUseCase.getAllActivities() } returns flow {
+        every { homeUseCase.getOrderedActivities() } returns flow {
             emit(GetActivityResult.Success(emptyList()))
         }
 

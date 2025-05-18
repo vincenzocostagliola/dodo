@@ -1,5 +1,6 @@
 package dev.vincenzocostagliola.home.repository
 
+import dev.vincenzocostagliola.data.datapersistence.DataPersistence
 import dev.vincenzocostagliola.data.error.AppError
 import dev.vincenzocostagliola.data.error.ErrorManagement
 import dev.vincenzocostagliola.db.ActivitiesDao
@@ -27,8 +28,8 @@ internal class RepositoryImplTest {
     private lateinit var repository: RepositoryImpl
     private lateinit var db: DodoDB
     private lateinit var dao: ActivitiesDao
+    private lateinit var dataPersiscence: DataPersistence
     private lateinit var error: AppError
-
 
 
     @Before
@@ -39,8 +40,9 @@ internal class RepositoryImplTest {
             every { activitiesDao() } returns dao
         }
         error = mockk<AppError.ErrorGenericCause>()
+        dataPersiscence = mockk(relaxed = true)
 
-        repository = RepositoryImpl( db)
+        repository = RepositoryImpl(db, dataPersiscence)
     }
 
     @After

@@ -36,15 +36,8 @@ internal class HomeModule {
     internal fun provideUseCase(
         repository: Repository,
         errorManagement: ErrorManagement,
-        appScope: CoroutineScope
 
     ): HomeUseCase = HomeUseCaseImpl(
         repository = repository,
-        errorManagement = errorManagement,
-        appScope = appScope
-    )
-
-    @Provides
-    fun provideApplicationScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-
+        errorManagement = errorManagement)
 }
