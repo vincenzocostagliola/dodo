@@ -56,7 +56,7 @@ internal data class Todo(
                     isSelected = status == this.status,
                     isClickable = !readOnly
                 )
-            }
+            }.sortedBy { it.value } // Sort alphabetically by name
         )
 
         Timber.d("Todo - toInfoForm - updated : $updated")
