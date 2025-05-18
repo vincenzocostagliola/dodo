@@ -32,7 +32,7 @@ It supports creating, editing, and viewing tasks, and lets users customize the s
 
 ## 📦 Project Structure
 
-```plaintext
+
 dodo/
 ├── app/                  # Main application module (NavGraph, App setup)
 │   ├── src/
@@ -56,3 +56,29 @@ dodo/
 ├── build.gradle.kts
 ├── settings.gradle.kts
 └── local.properties
+
+---
+## 🧠 Architecture
+
+The project is built following **modular Clean Architecture**, where concerns are separated clearly and modules are responsible for their own domains.
+
+### 🔹 Layers
+
+- **Presentation Layer**:  
+  UI built with Jetpack Compose + ViewModel using `StateFlow`.
+
+- **Domain Layer**:  
+  Business logic and use cases (can be extended to a separate module).
+
+- **Data Layer**:  
+  Handles data operations through repositories using Room and SharedPreferences.
+
+- **DI Layer**:  
+  Hilt provides dependency injection setup in each module.
+
+### ✨ Highlights
+
+- **MVVM architecture** (Model-View-ViewModel)
+- **Unidirectional Data Flow** from ViewModel → UI
+- **Feature-based modularization**: each feature is self-contained and independently testable
+- **UI state** is modeled using sealed classes or data classes and observed via `StateFlow`
