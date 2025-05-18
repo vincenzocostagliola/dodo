@@ -109,8 +109,6 @@ The project is built following **modular Clean Architecture**, where concerns ar
 
 ## 🧹 Future Improvements
 
-- Implement crypto favorites/bookmarks.
-- Add a search bar to filter crypto by name.
 - Dark mode support.
 - UI/UX enhancements with animated transitions.
 
