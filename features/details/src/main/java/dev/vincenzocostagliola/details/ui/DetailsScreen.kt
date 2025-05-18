@@ -69,29 +69,18 @@ private fun ManageState(
         }
 
         is ScreenState.Success -> {
-            var todo by remember { mutableStateOf<InfoForm>(viewState.todo) }
-
             Progress(false)
             ShowTodo(
-                info = todo,
+                info = viewState.todo,
                 onBackPressed = onBackPressed,
                 modifyOrSave = {
+
                     viewModel.sendEvent(
                         ScreenEvents.ModifyOrSave(it)
                     )
                 },
                 onValueChange = { viewModel.sendEvent(ScreenEvents.OnValueChanged(it)) },
                 onStatusChange = { option ->
-                    Timber.d("DetailsScreen - onStatusChange - todo: $todo")
-                    Timber.d("DetailsScreen - onStatusChange - option: $option")
-
-                    val updatedOption = option.copy(isSelected = true)
-                    val options = todo.statusOptions.map {
-                        it.copy(isSelected = it.value == updatedOption.value)
-                    }
-                    todo = todo.copy(statusOptions = options)
-                    Timber.d("DetailsScreen - onStatusChange - todo: $todo")
-
                     viewModel.sendEvent(ScreenEvents.OnStatusChange(option))
                 }
             )

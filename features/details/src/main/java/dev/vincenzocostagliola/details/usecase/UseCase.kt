@@ -6,8 +6,10 @@ import dev.vincenzocostagliola.details.data.domain.result.GetActivityResult
 import dev.vincenzocostagliola.details.data.domain.result.GetActivityResult.*
 import dev.vincenzocostagliola.details.data.dto.result.GetActivityResultDto
 import dev.vincenzocostagliola.details.repository.Repository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import org.threeten.bp.OffsetDateTime
 import timber.log.Timber
 import javax.inject.Inject
@@ -42,10 +44,8 @@ internal class UseCaseImpl @Inject internal constructor(
                         emit(NotFound)
                     }
                 }
-
-
             }
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     override suspend fun saveTodo(todo: Todo) {

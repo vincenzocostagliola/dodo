@@ -22,8 +22,6 @@ internal data class Todo(
     }
 
 
-
-
     fun toDto(date: OffsetDateTime): TodoDto {
         return TodoDto(
             id = id,
@@ -52,11 +50,13 @@ internal data class Todo(
                 )
             ),
             addedDate = addedDate,
-            statusOptions =  TodoStatus.entries.map { status -> Option(
-                value = status.name,
-                isSelected = status == this.status,
-                isClickable = !readOnly
-            ) }
+            statusOptions = TodoStatus.entries.map { status ->
+                Option(
+                    value = status.name,
+                    isSelected = status == this.status,
+                    isClickable = !readOnly
+                )
+            }
         )
 
         Timber.d("Todo - toInfoForm - updated : $updated")
@@ -85,14 +85,16 @@ internal data class Todo(
             )
         }
 
-        fun TodoStatus.toOption() : Option = Option(
+        fun TodoStatus.toOption(): Option = Option(
             value = this.name,
             isSelected = false,
             isClickable = true
         )
 
-        fun getOptionList() : List<Option>{
+        fun getOptionList(): List<Option> {
             return Todo.TodoStatus.entries.map { it.toOption() }
+                .sortedBy { it.value } // Sort alphabetically by name
+                .toMutableList()
         }
     }
 }
