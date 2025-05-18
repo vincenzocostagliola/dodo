@@ -32,7 +32,7 @@ It supports creating, editing, and viewing tasks, and lets users customize the s
 
 ## 📦 Project Structure
 
-
+```plaintext
 dodo/
 ├── app/                  # Main application module (NavGraph, App setup)
 │   ├── src/
@@ -56,6 +56,8 @@ dodo/
 ├── build.gradle.kts
 ├── settings.gradle.kts
 └── local.properties
+
+```
 
 ---
 ## 🧠 Architecture
@@ -82,3 +84,47 @@ The project is built following **modular Clean Architecture**, where concerns ar
 - **Unidirectional Data Flow** from ViewModel → UI
 - **Feature-based modularization**: each feature is self-contained and independently testable
 - **UI state** is modeled using sealed classes or data classes and observed via `StateFlow`
+
+## 🛠 Setup
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/vincenzocostagliola/dodo.git
+   ```
+
+2. Open in **Android Studio** (Meerkat or newer).
+
+3. Sync Gradle.
+
+4. Run the app!
+
+---
+
+
+## 📸 Screenshots
+
+*Coming soon... Stay tuned!* 🚀
+
+---
+
+## 🧹 Future Improvements
+
+- Implement crypto favorites/bookmarks.
+- Add a search bar to filter crypto by name.
+- Dark mode support.
+- UI/UX enhancements with animated transitions.
+
+---
+
+## 🧑‍💻 Contributing
+
+Pull requests and suggestions are welcome!  
+For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+---
