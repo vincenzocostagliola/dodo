@@ -32,69 +32,27 @@ It supports creating, editing, and viewing tasks, and lets users customize the s
 
 ## 📦 Project Structure
 
+```plaintext
 dodo/
-├── app/ # Main app module (entry point, activity)
-│ ├── src/
-│ └── build.gradle.kts
+├── app/                  # Main application module (NavGraph, App setup)
+│   ├── src/
+│   └── build.gradle.kts
 │
-├── build/ # Build outputs
+├── build/                # Build outputs
 │
-├── data/ # Data layer shared across features
-│ └── (repositories, models, DTOs, etc.)
+├── data/                 # Data handling (API, models, repository abstraction)
 │
-├── db/ # Room database setup and DAOs
+├── db/                   # Room database setup and DAO interfaces
 │
-├── designsystem/ # Theme, typography, reusable UI components
+├── designsystem/         # Theme, typography, reusable UI components
 │
-├── features/ # Feature-based modules
-│ ├── home/ # Shows sorted todo list
-│ ├── details/ # View/edit/create todo
-│ └── settings/ # Sorting preference
+├── features/             # Feature-based modules (each self-contained)
+│   ├── home/             # Home screen (todo list + ViewModel)
+│   ├── details/          # Add/edit/view single todo
+│   └── settings/         # Sorting preference screen
 │
-├── gradle/ # Gradle wrapper config
+├── gradle/               # Gradle wrapper and config
 │
 ├── build.gradle.kts
 ├── settings.gradle.kts
 └── local.properties
-
-yaml
-Copy
-Edit
-
----
-
-## 🧠 Architecture
-
-The project follows a **modular and clean architecture**:
-
-- **Feature Modules** (`features/home`, `details`, `settings`) are self-contained.
-- **Shared Modules** (`data`, `db`, `designsystem`) are reused across the app.
-- UI state is managed using `ViewModel` + `StateFlow` with **unidirectional data flow**.
-
----
-
-## 🚀 Getting Started
-
-1. **Clone the repo:**
-   ```bash
-   git clone https://github.com/your-username/dodo.git
-   cd dodo
-Open in Android Studio
-
-Run the app on an emulator or real device
-
-🧪 Testing
-Unit and integration tests located under each module’s test/ and androidTest/
-
-[TODO] Add Compose UI tests for interaction testing
-
-📸 Screenshots
-Coming soon... Add screenshots of Home, Details, and Settings.
-
-🛡️ License
-This project is licensed under the MIT License.
-See the LICENSE file for more details.
-
-markdown
-Copy
-Edit
